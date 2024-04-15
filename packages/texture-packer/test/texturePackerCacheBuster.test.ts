@@ -1,5 +1,5 @@
 import { AssetPack } from '@play-co/assetpack-core';
-import { cacheBuster } from '@assetpack/plugin-cache-buster';
+import { cacheBuster } from '@play-co/assetpack-plugin-cache-buster';
 import { mipmapCompress } from '@play-co/assetpack-plugin-mipmap-compress';
 import { texturePacker, texturePackerCompress } from '@play-co/assetpack-plugin-texture-packer';
 import { existsSync, readJSONSync } from 'fs-extra';
