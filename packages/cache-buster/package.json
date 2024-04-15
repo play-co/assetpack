@@ -1,5 +1,5 @@
 {
-  "name": "@assetpack/plugin-cache-buster",
+  "name": "@play-co/assetpack-plugin-cache-buster",
   "version": "0.7.0",
   "description": "",
   "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/cache-buster/#readme",
