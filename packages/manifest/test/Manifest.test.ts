@@ -1,8 +1,8 @@
-import { AssetPack } from '@assetpack/core';
-import { audio } from '@assetpack/plugin-ffmpeg';
-import { pixiManifest } from '@assetpack/plugin-manifest';
-import { mipmapCompress, spineAtlasMipmap } from '@assetpack/plugin-mipmap-compress';
-import { texturePacker } from '@assetpack/plugin-texture-packer';
+import { AssetPack } from '@play-co/assetpack-core';
+import { audio } from '@play-co/assetpack-plugin-ffmpeg';
+import { pixiManifest } from '@play-co/assetpack-plugin-manifest';
+import { mipmapCompress, spineAtlasMipmap } from '@play-co/assetpack-plugin-mipmap-compress';
+import { texturePacker } from '@play-co/assetpack-plugin-texture-packer';
 import { existsSync, readJSONSync } from 'fs-extra';
 import type { File } from '../../../shared/test';
 import {
@@ -137,26 +137,26 @@ describe('Manifest', () =>
         await assetpack.run();
 
         // load the manifest json
-        const manifest = await readJSONSync(`${outputDir}/manifest.json`);
+        const manifest =  sortObjectProperties((await readJSONSync(`${outputDir}/manifest.json`))) as any;
 
         expect(manifest.bundles[1]).toEqual({
             name: 'bundle',
             assets: [
                 {
-                    name: ['bundle/json.json'],
-                    srcs: ['bundle/json.json'],
+                    alias: ['bundle/json.json'],
+                    src: ['bundle/json.json'],
                 },
                 {
-                    name: ['bundle/json.json5'],
-                    srcs: ['bundle/json.json5'],
+                    alias: ['bundle/json.json5'],
+                    src: ['bundle/json.json5'],
                 },
                 {
-                    name: ['bundle/sprite.png'],
-                    srcs: [
-                        'bundle/sprite.webp',
+                    alias: ['bundle/sprite.png'],
+                    src: [
                         'bundle/sprite.png',
-                        'bundle/sprite@0.5x.webp',
+                        'bundle/sprite.webp',
                         'bundle/sprite@0.5x.png',
+                        'bundle/sprite@0.5x.webp',
                     ],
                     // data: {
                     //     tags: {
@@ -165,10 +165,10 @@ describe('Manifest', () =>
                     // },
                 },
                 {
-                    name: ['bundle/tps-0'],
-                    srcs: [
-                        'bundle/tps-0.json',
+                    alias: ['bundle/tps-0'],
+                    src: [
                         'bundle/tps-0@0.5x.json',
+                        'bundle/tps-0.json',
                     ],
                     // data: {
                     //     tags: {
@@ -178,10 +178,10 @@ describe('Manifest', () =>
                     // },
                 },
                 {
-                    name: ['bundle/tps-1'],
-                    srcs: [
-                        'bundle/tps-1.json',
+                    alias: ['bundle/tps-1'],
+                    src: [
                         'bundle/tps-1@0.5x.json',
+                        'bundle/tps-1.json',
                     ],
                     // data: {
                     //     tags: {
@@ -196,38 +196,38 @@ describe('Manifest', () =>
             name: 'default',
             assets: [
                 {
-                    name: ['defaultFolder/1.mp3'],
-                    srcs: ['defaultFolder/1.mp3', 'defaultFolder/1.ogg'],
+                    alias: ['defaultFolder/1.mp3'],
+                    src: ['defaultFolder/1.mp3', 'defaultFolder/1.ogg'],
                 },
                 {
-                    name: ['defaultFolder/3.wav'],
-                    srcs: ['defaultFolder/3.mp3', 'defaultFolder/3.ogg'],
+                    alias: ['defaultFolder/3.wav'],
+                    src: ['defaultFolder/3.mp3', 'defaultFolder/3.ogg'],
                 },
                 {
-                    name: ['spine/dragon.json'],
-                    srcs: ['spine/dragon.json'],
+                    alias: ['spine/dragon.json'],
+                    src: ['spine/dragon.json'],
                 },
                 {
-                    name: ['spine/dragon.png'],
-                    srcs: [
-                        'spine/dragon.webp',
+                    alias: ['spine/dragon.png'],
+                    src: [
                         'spine/dragon.png',
-                        'spine/dragon@0.5x.webp',
+                        'spine/dragon.webp',
                         'spine/dragon@0.5x.png',
+                        'spine/dragon@0.5x.webp',
                     ],
                 },
                 {
-                    name: ['spine/dragon2.png'],
-                    srcs: [
-                        'spine/dragon2.webp',
+                    alias: ['spine/dragon2.png'],
+                    src: [
                         'spine/dragon2.png',
-                        'spine/dragon2@0.5x.webp',
+                        'spine/dragon2.webp',
                         'spine/dragon2@0.5x.png',
+                        'spine/dragon2@0.5x.webp',
                     ],
                 },
                 {
-                    name: ['spine/dragon.atlas'],
-                    srcs: [
+                    alias: ['spine/dragon.atlas'],
+                    src: [
                         'spine/dragon.atlas',
                         'spine/dragon@0.5x.atlas',
                     ],
@@ -342,118 +342,118 @@ describe('Manifest', () =>
         await assetpack.run();
 
         // load the manifest json
-        const manifest = await readJSONSync(`${outputDir}/manifest.json`);
+        const manifest =  sortObjectProperties((await readJSONSync(`${outputDir}/manifest.json`))) as any;
 
         expect(manifest.bundles[0]).toEqual({
             name: 'default',
             assets: [
                 {
-                    name: [
+                    alias: [
                         'folder/json.json',
                         'folder/json',
                         'json.json',
                         'json'
                     ],
-                    srcs: [
+                    src: [
                         'folder/json.json'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder/json.json5',
                         'folder/json',
                         'json.json5',
                         'json'
                     ],
-                    srcs: [
+                    src: [
                         'folder/json.json5'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder/sprite.png',
                         'folder/sprite',
                         'sprite.png',
                         'sprite'
                     ],
-                    srcs: [
-                        'folder/sprite.webp',
+                    src: [
                         'folder/sprite.png',
+                        'folder/sprite.webp',
+                        'folder/sprite@0.5x.png',
                         'folder/sprite@0.5x.webp',
-                        'folder/sprite@0.5x.png'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder2/1.mp3',
                         'folder2/1',
                         '1.mp3',
                         '1'
                     ],
-                    srcs: [
+                    src: [
                         'folder2/1.mp3',
                         'folder2/1.ogg'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder2/folder3/1.mp3',
                         'folder2/folder3/1',
                         '1.mp3',
                         '1'
                     ],
-                    srcs: [
+                    src: [
                         'folder2/folder3/1.mp3',
                         'folder2/folder3/1.ogg'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon.json',
                         'spine/dragon',
                         'dragon.json',
                         'dragon'
                     ],
-                    srcs: [
+                    src: [
                         'spine/dragon.json'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon.png',
                         'spine/dragon',
                         'dragon.png',
                         'dragon'
                     ],
-                    srcs: [
-                        'spine/dragon.webp',
+                    src: [
                         'spine/dragon.png',
+                        'spine/dragon.webp',
+                        'spine/dragon@0.5x.png',
                         'spine/dragon@0.5x.webp',
-                        'spine/dragon@0.5x.png'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon2.png',
                         'spine/dragon2',
                         'dragon2.png',
                         'dragon2'
                     ],
-                    srcs: [
-                        'spine/dragon2.webp',
+                    src: [
                         'spine/dragon2.png',
+                        'spine/dragon2.webp',
+                        'spine/dragon2@0.5x.png',
                         'spine/dragon2@0.5x.webp',
-                        'spine/dragon2@0.5x.png'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon.atlas',
                         'spine/dragon',
                         'dragon.atlas',
                         'dragon'
                     ],
-                    srcs: [
+                    src: [
                         'spine/dragon.atlas',
                         'spine/dragon@0.5x.atlas'
                     ]
@@ -563,61 +563,61 @@ describe('Manifest', () =>
         await assetpack.run();
 
         // load the manifest json
-        const manifest = await readJSONSync(`${outputDir}/manifest.json`);
+        const manifest =  sortObjectProperties((await readJSONSync(`${outputDir}/manifest.json`))) as any;
 
         expect(manifest.bundles[0]).toEqual({
             name: 'default',
             assets: [
                 {
-                    name: ['folder/json.json', 'json.json'],
-                    srcs: ['folder/json.json'],
+                    alias: ['folder/json.json', 'json.json'],
+                    src: ['folder/json.json'],
                 },
                 {
-                    name: ['folder/json.json5', 'json.json5'],
-                    srcs: ['folder/json.json5'],
+                    alias: ['folder/json.json5', 'json.json5'],
+                    src: ['folder/json.json5'],
                 },
                 {
-                    name: ['folder/sprite.png', 'sprite.png'],
-                    srcs: [
-                        'folder/sprite.webp',
+                    alias: ['folder/sprite.png', 'sprite.png'],
+                    src: [
                         'folder/sprite.png',
+                        'folder/sprite.webp',
+                        'folder/sprite@0.5x.png',
                         'folder/sprite@0.5x.webp',
-                        'folder/sprite@0.5x.png'
                     ],
                 },
                 {
-                    name: ['folder2/1.mp3', '1.mp3'],
-                    srcs: ['folder2/1.mp3', 'folder2/1.ogg'],
+                    alias: ['folder2/1.mp3', '1.mp3'],
+                    src: ['folder2/1.mp3', 'folder2/1.ogg'],
                 },
                 {
-                    name: ['folder2/folder3/1.mp3', '1.mp3'],
-                    srcs: ['folder2/folder3/1.mp3', 'folder2/folder3/1.ogg'],
+                    alias: ['folder2/folder3/1.mp3', '1.mp3'],
+                    src: ['folder2/folder3/1.mp3', 'folder2/folder3/1.ogg'],
                 },
                 {
-                    name: ['spine/dragon.json', 'dragon.json'],
-                    srcs: ['spine/dragon.json'],
+                    alias: ['spine/dragon.json', 'dragon.json'],
+                    src: ['spine/dragon.json'],
                 },
                 {
-                    name: ['spine/dragon.png', 'dragon.png'],
-                    srcs: [
-                        'spine/dragon.webp',
+                    alias: ['spine/dragon.png', 'dragon.png'],
+                    src: [
                         'spine/dragon.png',
+                        'spine/dragon.webp',
+                        'spine/dragon@0.5x.png',
                         'spine/dragon@0.5x.webp',
-                        'spine/dragon@0.5x.png'
                     ],
                 },
                 {
-                    name: ['spine/dragon2.png', 'dragon2.png'],
-                    srcs: [
-                        'spine/dragon2.webp',
+                    alias: ['spine/dragon2.png', 'dragon2.png'],
+                    src: [
                         'spine/dragon2.png',
+                        'spine/dragon2.webp',
+                        'spine/dragon2@0.5x.png',
                         'spine/dragon2@0.5x.webp',
-                        'spine/dragon2@0.5x.png'
                     ],
                 },
                 {
-                    name: ['spine/dragon.atlas', 'dragon.atlas'],
-                    srcs: ['spine/dragon.atlas', 'spine/dragon@0.5x.atlas'],
+                    alias: ['spine/dragon.atlas', 'dragon.atlas'],
+                    src: ['spine/dragon.atlas', 'spine/dragon@0.5x.atlas'],
                 },
             ],
         });
@@ -724,100 +724,100 @@ describe('Manifest', () =>
         await assetpack.run();
 
         // load the manifest json
-        const manifest = await readJSONSync(`${outputDir}/manifest.json`);
+        const manifest =  sortObjectProperties((await readJSONSync(`${outputDir}/manifest.json`))) as any;
 
         expect(manifest.bundles[0]).toEqual({
             name: 'default',
             assets: [
                 {
-                    name: [
+                    alias: [
                         'folder/json.json',
                         'folder/json'
                     ],
-                    srcs: [
+                    src: [
                         'folder/json.json'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder/json.json5',
                         'folder/json'
                     ],
-                    srcs: [
+                    src: [
                         'folder/json.json5'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder/sprite.png',
                         'folder/sprite'
                     ],
-                    srcs: [
-                        'folder/sprite.webp',
+                    src: [
                         'folder/sprite.png',
+                        'folder/sprite.webp',
+                        'folder/sprite@0.5x.png',
                         'folder/sprite@0.5x.webp',
-                        'folder/sprite@0.5x.png'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder2/1.mp3',
                         'folder2/1'
                     ],
-                    srcs: [
+                    src: [
                         'folder2/1.mp3',
                         'folder2/1.ogg'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'folder2/folder3/1.mp3',
                         'folder2/folder3/1'
                     ],
-                    srcs: [
+                    src: [
                         'folder2/folder3/1.mp3',
                         'folder2/folder3/1.ogg'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon.json',
                         'spine/dragon'
                     ],
-                    srcs: [
+                    src: [
                         'spine/dragon.json'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon.png',
                         'spine/dragon'
                     ],
-                    srcs: [
-                        'spine/dragon.webp',
+                    src: [
                         'spine/dragon.png',
+                        'spine/dragon.webp',
+                        'spine/dragon@0.5x.png',
                         'spine/dragon@0.5x.webp',
-                        'spine/dragon@0.5x.png'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon2.png',
                         'spine/dragon2'
                     ],
-                    srcs: [
-                        'spine/dragon2.webp',
+                    src: [
                         'spine/dragon2.png',
+                        'spine/dragon2.webp',
+                        'spine/dragon2@0.5x.png',
                         'spine/dragon2@0.5x.webp',
-                        'spine/dragon2@0.5x.png'
                     ]
                 },
                 {
-                    name: [
+                    alias: [
                         'spine/dragon.atlas',
                         'spine/dragon'
                     ],
-                    srcs: [
+                    src: [
                         'spine/dragon.atlas',
                         'spine/dragon@0.5x.atlas'
                     ]
@@ -866,4 +866,102 @@ describe('Manifest', () =>
         expect(existsSync(`${outputDir}/manifest.json`)).toBe(false);
         expect(existsSync(`${outputDir}/manifest2.json`)).toBe(true);
     });
+
+    it('should ensure sub-manifests are created correctly', async () =>
+    {
+        const testName = 'manifest-sub-manifest';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        createFolder(pkg, {
+            name: testName,
+            files: [],
+            folders: [
+                {
+                    name: 'sound{m}',
+                    files: [
+                        {
+                            name: '1.mp3',
+                            content: assetPath(pkg, 'audio/1.mp3'),
+                        },
+                    ],
+                    folders: [],
+                },
+                {
+                    name: 'sound2{m}',
+                    files: [
+                        {
+                            name: '2.mp3',
+                            content: assetPath(pkg, 'audio/1.mp3'),
+                        },
+                    ],
+                    folders: [],
+                },
+            ],
+        });
+
+        const assetpack = new AssetPack({
+            entry: inputDir,
+            output: outputDir,
+            pipes: [
+                pixiManifest(),
+            ],
+        });
+
+        await assetpack.run();
+
+        expect(readJSONSync(`${outputDir}/manifest.json`)).toEqual({
+            bundles: [
+                {
+                    name: 'default',
+                    assets: []
+                },
+                {
+                    name: 'sound2',
+                    assets: [
+                        {
+                            alias: [
+                                'sound2/2.mp3'
+                            ],
+                            src: [
+                                'sound2/2.mp3'
+                            ]
+                        }
+                    ]
+                },
+                {
+                    name: 'sound',
+                    assets: [
+                        {
+                            alias: [
+                                'sound/1.mp3'
+                            ],
+                            src: [
+                                'sound/1.mp3'
+                            ]
+                        }
+                    ]
+                }
+            ]
+        });
+    });
 });
+
+function sortObjectProperties(obj: any)
+{
+    return Object.keys(obj).sort().reduce((acc: any, key: string) =>
+    {
+        const value = obj[key];
+
+        if (typeof value === 'object' && !Array.isArray(value) && value !== null)
+        {
+            acc[key] = sortObjectProperties(value);
+        }
+        else
+        {
+            acc[key] = value;
+        }
+
+        return acc;
+    }, {});
+}

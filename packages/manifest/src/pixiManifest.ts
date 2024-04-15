@@ -8,7 +8,7 @@ import {
     relative,
     trimExt,
     dirname
-} from '@assetpack/core';
+} from '@play-co/assetpack-core';
 
 import { writeJSON } from 'fs-extra';
 export interface PixiManifest
@@ -19,15 +19,15 @@ export interface PixiManifest
 
 export interface PixiManifestEntry
 {
-    name: string | string[];
-    srcs: string | string[];
+    alias: string | string[];
+    src: string | string[];
     data?: {
         // tags: Tags;
         [x: string]: any;
     };
 }
 
-export interface PixiManifestOptions// extends BaseManifestOptions
+export interface PixiManifestOptions
 {
     output?: string;
     createShortcuts?: boolean;
@@ -52,16 +52,16 @@ export function pixiManifest(_options: PixiManifestOptions = {}): AssetPipe<Pixi
             const newFileName = dirname(options.output) === '.'
                 ? joinSafe(pipeSystem.outputPath, options.output) : options.output;
 
-            const manifest = {
-                bundles: [
-                    {
-                        name: 'default',
-                        assets: []
-                    }
-                ]
+            const defaultBundle =  {
+                name: 'default',
+                assets: []
             };
 
-            collectAssets(asset, options, pipeSystem.outputPath, pipeSystem.entryPath, manifest.bundles, 0);
+            const manifest = {
+                bundles: [defaultBundle]
+            };
+
+            collectAssets(asset, options, pipeSystem.outputPath, pipeSystem.entryPath, manifest.bundles, defaultBundle);
 
             await writeJSON(newFileName, manifest, { spaces: 2 });
         }
@@ -74,20 +74,22 @@ function collectAssets(
     outputPath = '',
     entryPath = '',
     bundles: PixiManifest[],
-    bundleIndex = 0
+    bundle: PixiManifest,
 )
 {
+    let localBundle = bundle;
+
     if (asset.metaData.m || asset.metaData.manifest)
     {
-        bundles.push({
+        localBundle = {
             name: stripTags(asset.filename),
             assets: []
-        });
+        };
 
-        bundleIndex++;
+        bundles.push(localBundle);
     }
 
-    const bundleAssets = bundles[bundleIndex].assets;
+    const bundleAssets = localBundle.assets;
 
     const finalAssets = asset.getFinalTransformedChildren();
 
@@ -95,22 +97,20 @@ function collectAssets(
     {
         if (asset.metaData.tps)
         {
-            // console.log('SPRITE SHEEET PACKED');
             // do some special think for textures packed sprite sheet pages..
             getTexturePackedAssets(finalAssets).forEach((pages, pageIndex) =>
             {
-                //     console.log('PAGES', pages, pageIndex);
                 bundleAssets.push({
-                    name: getShortNames(stripTags(relative(entryPath, `${asset.path}-${pageIndex}`)), options),
-                    srcs: pages.map((finalAsset) => relative(outputPath, finalAsset.path))
+                    alias: getShortNames(stripTags(relative(entryPath, `${asset.path}-${pageIndex}`)), options),
+                    src: pages.map((finalAsset) => relative(outputPath, finalAsset.path))
                 });
             });
         }
         else
         {
             bundleAssets.push({
-                name: getShortNames(stripTags(relative(entryPath, asset.path)), options),
-                srcs: finalAssets.map((finalAsset) => relative(outputPath, finalAsset.path))
+                alias: getShortNames(stripTags(relative(entryPath, asset.path)), options),
+                src: finalAssets.map((finalAsset) => relative(outputPath, finalAsset.path))
             });
         }
     }
@@ -119,7 +119,7 @@ function collectAssets(
     {
         asset.children.forEach((child) =>
         {
-            collectAssets(child, options, outputPath, entryPath, bundles, bundleIndex);
+            collectAssets(child, options, outputPath, entryPath, bundles, localBundle);
         });
     }
 }

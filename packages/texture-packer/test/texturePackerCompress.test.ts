@@ -1,6 +1,6 @@
-import { AssetPack } from '@assetpack/core';
-import { mipmapCompress } from '@assetpack/plugin-mipmap-compress';
-import { texturePacker, texturePackerCompress } from '@assetpack/plugin-texture-packer';
+import { AssetPack } from '@play-co/assetpack-core';
+import { mipmapCompress } from '@play-co/assetpack-plugin-mipmap-compress';
+import { texturePacker, texturePackerCompress } from '@play-co/assetpack-plugin-texture-packer';
 import { readJSONSync } from 'fs-extra';
 import type { File } from '../../../shared/test/index';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test/index';
@@ -53,17 +53,23 @@ describe('Texture Packer Compression', () =>
                         resolutions: { default: 1 },
                     },
                 }),
-                mipmapCompress(),
-                texturePackerCompress({
-                    formats: ['webp', 'avif'],
+                mipmapCompress({
+                    compress: {
+                        png: true,
+                        jpg: true,
+                        webp: true,
+                    }
                 }),
+                texturePackerCompress(),
             ]
         });
 
         await assetpack.run();
 
-        const sheet1 = readJSONSync(`${outputDir}/sprites.json`);
+        const sheetPng = readJSONSync(`${outputDir}/sprites.png.json`);
+        const sheetWebp = readJSONSync(`${outputDir}/sprites.webp.json`);
 
-        expect(sheet1.meta.image).toEqual(`sprites.{webp,avif,png}`);
+        expect(sheetPng.meta.image).toEqual(`sprites.png`);
+        expect(sheetWebp.meta.image).toEqual(`sprites.webp`);
     });
 });
