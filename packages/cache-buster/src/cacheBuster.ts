@@ -1,5 +1,5 @@
-import type { AssetPipe, Asset } from '@assetpack/core';
-import { createNewAssetAt, swapExt } from '@assetpack/core';
+import type { AssetPipe, Asset } from '@play-co/assetpack-core';
+import { createNewAssetAt, swapExt } from '@play-co/assetpack-core';
 import { readFileSync } from 'fs-extra';
 
 import { crc32 as calculateCrc32 } from '@node-rs/crc32';
