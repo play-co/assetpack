@@ -175,8 +175,6 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
                         textureAsset.metaData[tags.fix] = true;
                         jsonAsset.metaData[tags.nc] = true;
 
-                        // useful to know what the json and texture use
-                        jsonAsset.metaData.spriteAsset = textureAsset;
                         jsonAsset.metaData.page = i;
 
                         assets.push(textureAsset, jsonAsset);
