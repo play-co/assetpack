@@ -108,13 +108,11 @@ async function convert(ffmpegOptions: FfmpegData, input: string, output: string,
     });
 }
 
-let nameIndex = 0;
-
 export function ffmpeg(defaultOptions: FfmpegOptions): AssetPipe<FfmpegOptions>
 {
     return {
         folder: false,
-        name: defaultOptions.name ?? `ffmpeg-${++nameIndex}`,
+        name: 'ffmpeg',
         defaultOptions,
         test(asset: Asset, options)
         {

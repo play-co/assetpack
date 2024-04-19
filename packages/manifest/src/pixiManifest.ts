@@ -44,7 +44,6 @@ export function pixiManifest(_options: PixiManifestOptions = {}): AssetPipe<Pixi
     };
 
     return {
-
         name: 'pixi-manifest',
         defaultOptions,
         finish: async (asset: Asset, options, pipeSystem: PipeSystem) =>
