@@ -959,6 +959,11 @@ function sortObjectProperties(obj: any)
         }
         else
         {
+            if (Array.isArray(value))
+            {
+                value.sort();
+            }
+
             acc[key] = value;
         }
 
