@@ -1,4 +1,4 @@
-import type { MipmapCompressImageData } from '../mipmapCompress';
+import type { MipmapCompressImageData } from '../mipmap';
 
 export async function mipmapSharp(
     image: MipmapCompressImageData,

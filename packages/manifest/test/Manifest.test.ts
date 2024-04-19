@@ -1,7 +1,8 @@
 import { AssetPack } from '@play-co/assetpack-core';
 import { audio } from '@play-co/assetpack-plugin-ffmpeg';
 import { pixiManifest } from '@play-co/assetpack-plugin-manifest';
-import { mipmapCompress, spineAtlasMipmap } from '@play-co/assetpack-plugin-mipmap-compress';
+import { spineAtlasMipmap } from '@play-co/assetpack-plugin-mipmap';
+import { compress } from '@play-co/assetpack-plugin-compress';
 import { texturePacker } from '@play-co/assetpack-plugin-texture-packer';
 import { existsSync, readJSONSync } from 'fs-extra';
 import type { File } from '../../../shared/test';
@@ -122,13 +123,11 @@ describe('Manifest', () =>
                 }),
                 audio(),
                 spineAtlasMipmap(),
-                mipmapCompress({
-                    compress: {
-                        png: true,
-                        jpg: true,
-                        webp: true,
-                        avif: false,
-                    }
+                compress({
+                    png: true,
+                    jpg: true,
+                    webp: true,
+                    avif: false,
                 }),
                 pixiManifest(),
             ]
@@ -326,11 +325,9 @@ describe('Manifest', () =>
                 }),
                 audio(),
                 spineAtlasMipmap(),
-                mipmapCompress({
-                    compress: {
-                        webp: true,
-                        png: true,
-                    }
+                compress({
+                    webp: true,
+                    png: true,
                 }),
                 pixiManifest({
                     createShortcuts: true,
@@ -547,11 +544,9 @@ describe('Manifest', () =>
                 }),
                 audio(),
                 spineAtlasMipmap(),
-                mipmapCompress({
-                    compress: {
-                        webp: true,
-                        png: true,
-                    }
+                compress({
+                    webp: true,
+                    png: true,
                 }),
                 pixiManifest({
                     createShortcuts: true,
@@ -708,11 +703,9 @@ describe('Manifest', () =>
                 }),
                 audio(),
                 spineAtlasMipmap(),
-                mipmapCompress({
-                    compress: {
-                        webp: true,
-                        png: true,
-                    }
+                compress({
+                    webp: true,
+                    png: true,
                 }),
                 pixiManifest({
                     createShortcuts: false,

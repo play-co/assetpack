@@ -1,6 +1,6 @@
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
 import { checkExt, type AssetPipe, createNewAssetAt } from '@play-co/assetpack-core';
-import type { MipmapOptions } from './mipmapCompress';
+import type { MipmapOptions } from './mipmap';
 
 export type SpineOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;
 

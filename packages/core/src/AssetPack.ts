@@ -11,17 +11,17 @@ import objectHash from 'object-hash';
 import { Logger } from './logger/Logger';
 import { promiseAllConcurrent } from './utils/promiseAllConcurrent';
 import { path } from './utils/path';
+import merge from 'merge';
 
 export class AssetPack
 {
-    public static defaultConfig: AssetPackConfig = {
+    private _defaultConfig: AssetPackConfig = {
         entry: './static',
         output: './dist',
         ignore: [],
         cache: true,
         logLevel: 'info',
         pipes: [],
-        // files: []
     };
 
     readonly config: AssetPackConfig;
@@ -33,13 +33,12 @@ export class AssetPack
 
     constructor(config: AssetPackConfig = {})
     {
-        config = { ...AssetPack.defaultConfig, ...config };
-        this.config = config;
-        this._entryPath = normalizePath(config.entry as string);
-        this._outputPath = normalizePath(config.output as string);
+        this.config = merge.recursive(true, this._defaultConfig, config);
+        this._entryPath = normalizePath(this.config.entry as string);
+        this._outputPath = normalizePath(this.config.output as string);
 
         Logger.init({
-            level: config.logLevel || 'info'
+            level: this.config.logLevel || 'info',
         });
 
         const { pipes, cache, ...configWithoutPlugins } = config;
@@ -98,8 +97,8 @@ export class AssetPack
         this._assetWatcher = new AssetWatcher({
             entryPath: this._entryPath,
             assetCacheData,
-            ignore: config.ignore,
-            assetSettingsData: config.assetSettings as AssetSettings[] || [],
+            ignore: this.config.ignore,
+            assetSettingsData: this.config.assetSettings as AssetSettings[] || [],
             onUpdate: async (root: Asset) =>
             {
                 Logger.report({
@@ -127,11 +126,6 @@ export class AssetPack
                     Logger.info('cache updated.');
                 }
             }
-        });
-
-        Logger.report({
-            type: 'buildStart',
-            message: config.entry,
         });
     }
 

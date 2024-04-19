@@ -1,12 +1,10 @@
-import type { PluginOptions, Asset, AssetPipe } from '@play-co/assetpack-core';
-import { checkExt, createNewAssetAt  } from '@play-co/assetpack-core';
-import type { AvifOptions, JpegOptions, PngOptions, WebpOptions } from 'sharp';
+import type { Asset, AssetPipe, PluginOptions } from '@play-co/assetpack-core';
+import { checkExt, createNewAssetAt } from '@play-co/assetpack-core';
 import sharp from 'sharp';
-import { resolveOptions } from './utils/resolveOptions';
 import { mipmapSharp } from './utils/mipmapSharp';
-import { compressSharp } from './utils/compressSharp';
+import { resolveOptions } from './utils/resolveOptions';
 
-export interface MipmapOptions
+export interface MipmapOptions<T extends string = ''> extends PluginOptions<'fix' | T>
 {
     /** A template for denoting the resolution of the images. */
     template?: string;
@@ -14,25 +12,6 @@ export interface MipmapOptions
     resolutions?: {[x: string]: number};
     /** A resolution used if the fixed tag is applied. Resolution must match one found in resolutions. */
     fixedResolution?: string;
-}
-
-type CompressJpgOptions = Omit<JpegOptions, 'force'>;
-type CompressWebpOptions = Omit<WebpOptions, 'force'>;
-type CompressAvifOptions = Omit<AvifOptions, 'force'>;
-type CompressPngOptions = Omit<PngOptions, 'force'>;
-
-export interface CompressOptions
-{
-    png?: CompressPngOptions | boolean;
-    webp?: CompressWebpOptions | boolean;
-    avif?: CompressAvifOptions | boolean;
-    jpg?: CompressJpgOptions | boolean;
-}
-
-export interface MipmapCompressOptions extends PluginOptions<'fix' | 'nc'>
-{
-    mipmap?: MipmapOptions | boolean;
-    compress?: CompressOptions | boolean;
 }
 
 export interface MipmapCompressImageData
@@ -45,42 +24,20 @@ export interface MipmapCompressImageData
 const defaultMipmapOptions: Required<MipmapOptions> = {
     template: '@%%x',
     resolutions: { default: 1, low: 0.5 },
-    fixedResolution: 'default'
+    fixedResolution: 'default',
+    tags: {
+        fix: 'fix',
+    }
 };
 
-export function mipmapCompress(_options: MipmapCompressOptions = {}): AssetPipe<MipmapCompressOptions>
+export function mipmap(_options: MipmapOptions = {}): AssetPipe<MipmapOptions>
 {
-    const mipmap = resolveOptions(_options.mipmap, defaultMipmapOptions);
-
-    const compress = resolveOptions<CompressOptions>(_options.compress, {
-        png: true,
-        jpg: true,
-        webp: false,
-        avif: false,
-    });
-
-    if (compress)
-    {
-        compress.jpg = resolveOptions<CompressJpgOptions>(compress.jpg, {
-
-        });
-        compress.png = resolveOptions<CompressPngOptions>(compress.png, {
-            quality: 90,
-        });
-        compress.webp = resolveOptions<CompressWebpOptions>(compress.webp, {
-            quality: 80,
-        });
-        compress.avif = resolveOptions<CompressAvifOptions>(compress.avif, {
-
-        });
-    }
+    const mipmap = resolveOptions(_options, defaultMipmapOptions);
 
     const defaultOptions = {
-        mipmap,
-        compress,
+        ...mipmap,
         tags: {
             fix: 'fix',
-            nc: 'nc',
             ..._options.tags,
         }
     };
@@ -91,12 +48,11 @@ export function mipmapCompress(_options: MipmapCompressOptions = {}): AssetPipe<
         defaultOptions,
         test(asset: Asset, options)
         {
-            return (options.mipmap || options.compress) && checkExt(asset.path, '.png', '.jpg', '.jpeg');
+            return options && checkExt(asset.path, '.png', '.jpg', '.jpeg');
         },
         async transform(asset: Asset, options)
         {
             const shouldMipmap =  mipmap && !asset.metaData[options.tags.fix as any];
-            const shouldCompress = compress && !asset.metaData[options.tags.nc as any];
 
             let processedImages: MipmapCompressImageData[];
 
@@ -106,13 +62,12 @@ export function mipmapCompress(_options: MipmapCompressOptions = {}): AssetPipe<
                 sharpImage: sharp(asset.buffer),
             };
 
-            // first mipmap if we want..
             try
             {
                 if (shouldMipmap)
                 {
-                    const { resolutions, fixedResolution } = options.mipmap as Required<MipmapOptions>
-                        || defaultOptions.mipmap;
+                    const { resolutions, fixedResolution } = options as Required<MipmapOptions>
+                        || defaultOptions;
 
                     const fixedResolutions: {[x: string]: number} = {};
 
@@ -138,28 +93,14 @@ export function mipmapCompress(_options: MipmapCompressOptions = {}): AssetPipe<
                 throw new Error(`[AssetPack] Failed to mipmap image: ${asset.path} - ${error}`);
             }
 
-            try
-            {
-                if (shouldCompress)
-                {
-                    processedImages = (await Promise.all(
-                        processedImages.map((image) => compressSharp(image, options.compress as CompressOptions))
-                    )).flat();
-                }
-            }
-            catch (error)
-            {
-                throw new Error(`[AssetPack] Failed to compress image: ${asset.path} - ${error}`);
-            }
-
             // now create our new assets
             const newAssets = processedImages.map((data) =>
             {
                 let resolution = '';
 
-                if (options.mipmap)
+                if (options)
                 {
-                    resolution = (options.mipmap as Required<MipmapOptions>).template.replace('%%', `${data.resolution}`);
+                    resolution = (options as Required<MipmapOptions>).template.replace('%%', `${data.resolution}`);
                     resolution = data.resolution === 1 ? '' : resolution;
                 }
 

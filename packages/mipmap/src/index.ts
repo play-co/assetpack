@@ -1,2 +1,2 @@
-export * from './mipmapCompress';
+export * from './mipmap';
 export * from './spineAtlasMipmap';

@@ -1,6 +1,6 @@
 import { AssetPack } from '@play-co/assetpack-core';
 import { cacheBuster } from '@play-co/assetpack-plugin-cache-buster';
-import { mipmapCompress } from '@play-co/assetpack-plugin-mipmap-compress';
+import { compress } from '@play-co/assetpack-plugin-compress';
 import { texturePacker, texturePackerCompress } from '@play-co/assetpack-plugin-texture-packer';
 import { existsSync, readJSONSync } from 'fs-extra';
 import type { File } from '../../../shared/test/index';
@@ -87,12 +87,10 @@ describe('Texture Packer Compression', () =>
                         resolutions: { default: 1 },
                     },
                 }),
-                mipmapCompress({
-                    compress: {
-                        png: true,
-                        jpg: true,
-                        webp: true,
-                    }
+                compress({
+                    png: true,
+                    jpg: true,
+                    webp: true,
                 }),
                 texturePackerCompress(),
                 cacheBuster(),

@@ -1,12 +1,12 @@
 {
-  "name": "@play-co/assetpack-plugin-mipmap-compress",
+  "name": "@play-co/assetpack-plugin-mipmap",
   "version": "1.1.3",
   "description": "",
-  "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/mipmap-compress/#readme",
+  "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/mipmap/#readme",
   "bugs": "https://github.com/pixijs/assetpack/issues",
   "repository": {
     "url": "pixijs/assetpack",
-    "directory": "packages/mipmap-compress"
+    "directory": "packages/mipmap"
   },
   "license": "MIT",
   "author": "Zyie",
