@@ -1,6 +1,5 @@
 import type { AssetPipe, Asset, PluginOptions } from '@play-co/assetpack-core';
-import { checkExt, createNewAssetAt } from '@play-co/assetpack-core';
-import { Logger } from 'packages/core/src/logger/Logger';
+import { checkExt, createNewAssetAt, Logger } from '@play-co/assetpack-core';
 
 export type JsonOptions = PluginOptions<'nc'>;
 

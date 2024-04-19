@@ -1,5 +1,5 @@
 import type { AssetPipe, Asset } from '@play-co/assetpack-core';
-import { checkExt, createNewAssetAt, extname, dirname } from '@play-co/assetpack-core';
+import { checkExt, createNewAssetAt, path } from '@play-co/assetpack-core';
 import fluentFfmpeg from 'fluent-ffmpeg';
 import ffmpegPath from '@ffmpeg-installer/ffmpeg';
 import {  copyFileSync, ensureDir } from 'fs-extra';
@@ -64,7 +64,7 @@ async function convert(ffmpegOptions: FfmpegData, input: string, output: string,
         let hasOutput = false;
         const command = fluentFfmpeg();
 
-        await ensureDir(dirname(output));
+        await ensureDir(path.dirname(output));
 
         // add each format to the command as an output
         ffmpegOptions.formats.forEach((format) =>
@@ -126,7 +126,7 @@ export function ffmpeg(defaultOptions: FfmpegOptions): AssetPipe<FfmpegOptions>
         async transform(asset: Asset, options)
         {
             // merge options with defaults
-            const extension = extname(asset.path);
+            const extension = path.extname(asset.path);
 
             const baseFileName = asset.filename.replace(extension, '');
 

@@ -1,10 +1,9 @@
 import type { PluginOptions, Asset, AssetPipe } from '@play-co/assetpack-core';
-import { createNewAssetAt, stripTags, relative  } from '@play-co/assetpack-core';
+import { createNewAssetAt, stripTags, path, Logger  } from '@play-co/assetpack-core';
 import { readFile } from 'fs-extra';
 import glob from 'glob-promise';
 import type { PackTexturesOptions, TexturePackerFormat } from './packer/packTextures';
 import { packTextures } from './packer/packTextures';
-import { Logger } from 'packages/core/src/logger/Logger';
 
 export interface TexturePackerOptions extends PluginOptions<'tps' | 'fix' | 'jpg' | 'nc' >
 {
@@ -114,7 +113,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
             {
                 const contents = await readFile(f);
 
-                return { path: stripTags(relative(asset.path, f)), contents };
+                return { path: stripTags(path.relative(asset.path, f)), contents };
             }));
 
             const textureFormat = (asset.metaData[tags.jpg as any] ? 'jpg' : 'png') as TexturePackerFormat;

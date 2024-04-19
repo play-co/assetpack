@@ -1,7 +1,7 @@
 import sharp from 'sharp';
 import type { PackTexturesOptions, PixiRectData, TextureData } from './packTextures';
 import { MaxRectsPacker } from 'maxrects-packer';
-import { Logger } from 'packages/core/src/logger/Logger';
+import { Logger } from '@play-co/assetpack-core';
 
 export async function createTextureData(options: Required<PackTexturesOptions>)
 {
