@@ -72,6 +72,13 @@ export class AssetPack
             {
                 Logger.info('cache found.');
             }
+            else
+            {
+                Logger.warn('cache not found, clearing output folder');
+
+                // to be safe - lets nuke the folder as the cache is empty
+                fs.removeSync(this._outputPath);
+            }
         }
 
         // make sure the output folders exists
@@ -164,6 +171,8 @@ export class AssetPack
         const all = assetsToTransform.map((asset) =>
             (async () =>
             {
+                if (asset.skip) return;
+
                 await this._pipeSystem.transform(asset);
                 index++;
 
@@ -194,12 +203,9 @@ export class AssetPack
                 output.push(asset);
             }
 
-            if (!asset.ignoreChildren)
+            for (let i = 0; i < asset.children.length; i++)
             {
-                for (let i = 0; i < asset.children.length; i++)
-                {
-                    this.deleteAndCollectAssetsToTransform(asset.children[i], output);
-                }
+                this.deleteAndCollectAssetsToTransform(asset.children[i], output);
             }
         }
     }
