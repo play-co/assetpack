@@ -12,6 +12,7 @@ import {
     getInputDir,
     getOutputDir,
 } from '../../../shared/test';
+import { mipmap } from '@play-co/assetpack-plugin-mipmap';
 
 const pkg = 'manifest';
 
@@ -123,6 +124,7 @@ describe('Manifest', () =>
                 }),
                 audio(),
                 spineAtlasMipmap(),
+                mipmap(),
                 compress({
                     png: true,
                     jpg: true,
@@ -326,6 +328,7 @@ describe('Manifest', () =>
                     },
                 }),
                 audio(),
+                mipmap(),
                 spineAtlasMipmap(),
                 compress({
                     webp: true,
@@ -592,6 +595,7 @@ describe('Manifest', () =>
                     },
                 }),
                 audio(),
+                mipmap(),
                 spineAtlasMipmap(),
                 compress({
                     webp: true,
@@ -736,6 +740,7 @@ describe('Manifest', () =>
                 }),
                 audio(),
                 spineAtlasMipmap(),
+                mipmap(),
                 compress({
                     webp: true,
                     png: true,

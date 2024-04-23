@@ -41,7 +41,7 @@ export class AssetPack
             level: this.config.logLevel || 'info',
         });
 
-        const { pipes, cache, ...configWithoutPlugins } = config;
+        const { pipes, cache, ...configWithoutPlugins } = this.config;
 
         // make a hash..
         const cacheName = [objectHash(configWithoutPlugins), ...(pipes as AssetPipe[]).map((pipe) => pipe.name)].join('-');
