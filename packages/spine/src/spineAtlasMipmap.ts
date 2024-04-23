@@ -1,8 +1,8 @@
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
 import { checkExt, type AssetPipe, createNewAssetAt } from '@play-co/assetpack-core';
-import type { MipmapOptions } from './mipmap';
+import type { MipmapOptions } from '@play-co/assetpack-plugin-mipmap';
 
-export type SpineOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;
+export type SpineOptions = PluginOptions<'fix'> & MipmapOptions;
 
 export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOptions>
 {

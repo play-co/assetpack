@@ -1,12 +1,12 @@
 {
-  "name": "@play-co/assetpack-plugin-cache-buster",
+  "name": "@play-co/assetpack-plugin-spine",
   "version": "1.2.2",
   "description": "",
   "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/cache-buster/#readme",
   "bugs": "https://github.com/pixijs/assetpack/issues",
   "repository": {
     "url": "pixijs/assetpack",
-    "directory": "packages/cache-buster"
+    "directory": "packages/spine"
   },
   "license": "MIT",
   "author": "Zyie",
@@ -32,10 +32,14 @@
     "fs-extra": "^11.1.0"
   },
   "devDependencies": {
-    "@play-co/assetpack-core": "1.2.2"
+    "@play-co/assetpack-core": "1.2.2",
+    "@play-co/assetpack-plugin-mipmap": "1.2.2",
+    "@play-co/assetpack-plugin-compress": "1.2.2"
   },
   "peerDependencies": {
-    "@play-co/assetpack-core": ">=0.0.0"
+    "@play-co/assetpack-core": ">=0.0.0",
+    "@play-co/assetpack-plugin-mipmap": ">=0.0.0",
+    "@play-co/assetpack-plugin-compress": ">=0.0.0"
   },
   "engines": {
     "node": ">=16.0.0"

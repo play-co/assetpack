@@ -1,7 +1,7 @@
 import { AssetPack } from '@play-co/assetpack-core';
 import { audio } from '@play-co/assetpack-plugin-ffmpeg';
 import { pixiManifest } from '@play-co/assetpack-plugin-manifest';
-import { spineAtlasMipmap } from '@play-co/assetpack-plugin-mipmap';
+import { spineAtlasMipmap } from '@play-co/assetpack-plugin-spine';
 import { compress } from '@play-co/assetpack-plugin-compress';
 import { texturePacker } from '@play-co/assetpack-plugin-texture-packer';
 import { existsSync, readJSONSync } from 'fs-extra';
@@ -144,50 +144,60 @@ describe('Manifest', () =>
                 {
                     alias: ['bundle/json.json'],
                     src: ['bundle/json.json'],
+                    data: {
+                        tags: {
+                            m: true,
+                        },
+                    },
                 },
                 {
                     alias: ['bundle/json.json5'],
                     src: ['bundle/json.json5'],
+                    data: {
+                        tags: {
+                            m: true,
+                        },
+                    },
                 },
                 {
                     alias: ['bundle/sprite.png'],
                     src: [
-                        'bundle/sprite.png',
-                        'bundle/sprite.webp',
-                        'bundle/sprite@0.5x.png',
                         'bundle/sprite@0.5x.webp',
+                        'bundle/sprite@0.5x.png',
+                        'bundle/sprite.webp',
+                        'bundle/sprite.png',
                     ],
-                    // data: {
-                    //     tags: {
-                    //         m: true,
-                    //     },
-                    // },
+                    data: {
+                        tags: {
+                            m: true,
+                        },
+                    },
                 },
                 {
                     alias: ['bundle/tps-0'],
                     src: [
-                        'bundle/tps-0.json',
                         'bundle/tps-0@0.5x.json',
+                        'bundle/tps-0.json',
                     ],
-                    // data: {
-                    //     tags: {
-                    //         tps: true,
-                    //         m: true,
-                    //     },
-                    // },
+                    data: {
+                        tags: {
+                            tps: true,
+                            m: true,
+                        },
+                    },
                 },
                 {
                     alias: ['bundle/tps-1'],
                     src: [
-                        'bundle/tps-1.json',
                         'bundle/tps-1@0.5x.json',
+                        'bundle/tps-1.json',
                     ],
-                    // data: {
-                    //     tags: {
-                    //         tps: true,
-                    //         m: true,
-                    //     },
-                    // },
+                    data: {
+                        tags: {
+                            tps: true,
+                            m: true,
+                        },
+                    },
                 },
             ],
         });
@@ -196,45 +206,36 @@ describe('Manifest', () =>
             assets: [
                 {
                     alias: ['defaultFolder/1.mp3'],
-                    src: ['defaultFolder/1.mp3', 'defaultFolder/1.ogg'],
+                    src: ['defaultFolder/1.ogg', 'defaultFolder/1.mp3'],
+                    data: {
+                        tags: {},
+                    },
                 },
                 {
                     alias: ['defaultFolder/3.wav'],
-                    src: ['defaultFolder/3.mp3', 'defaultFolder/3.ogg'],
+                    src: ['defaultFolder/3.ogg', 'defaultFolder/3.mp3'],
+                    data: {
+                        tags: {},
+                    },
                 },
                 {
                     alias: ['spine/dragon.json'],
                     src: ['spine/dragon.json'],
-                },
-                {
-                    alias: ['spine/dragon.png'],
-                    src: [
-                        'spine/dragon.png',
-                        'spine/dragon.webp',
-                        'spine/dragon@0.5x.png',
-                        'spine/dragon@0.5x.webp',
-                    ],
-                },
-                {
-                    alias: ['spine/dragon2.png'],
-                    src: [
-                        'spine/dragon2.png',
-                        'spine/dragon2.webp',
-                        'spine/dragon2@0.5x.png',
-                        'spine/dragon2@0.5x.webp',
-                    ],
+                    data: {
+                        tags: {}
+                    },
                 },
                 {
                     alias: ['spine/dragon.atlas'],
                     src: [
-                        'spine/dragon.atlas',
                         'spine/dragon@0.5x.atlas',
+                        'spine/dragon.atlas',
                     ],
-                    // data: {
-                    //     tags: {
-                    //         spine: true,
-                    //     },
-                    // },
+                    data: {
+                        tags: {
+                            spine: true,
+                        },
+                    },
                 },
             ],
         });
@@ -317,6 +318,7 @@ describe('Manifest', () =>
         const assetpack = new AssetPack({
             entry: inputDir,
             output: outputDir,
+            cache: false,
             pipes: [
                 texturePacker({
                     resolutionOptions: {
@@ -332,6 +334,7 @@ describe('Manifest', () =>
                 pixiManifest({
                     createShortcuts: true,
                     trimExtensions: true,
+                    includeMetaData: false
                 }),
             ],
         });
@@ -339,7 +342,7 @@ describe('Manifest', () =>
         await assetpack.run();
 
         // load the manifest json
-        const manifest =  sortObjectProperties((await readJSONSync(`${outputDir}/manifest.json`))) as any;
+        const manifest =  sortObjectProperties(await readJSONSync(`${outputDir}/manifest.json`));
 
         expect(manifest.bundles[0]).toEqual({
             name: 'default',
@@ -374,10 +377,10 @@ describe('Manifest', () =>
                         'sprite'
                     ],
                     src: [
-                        'folder/sprite.png',
-                        'folder/sprite.webp',
-                        'folder/sprite@0.5x.png',
                         'folder/sprite@0.5x.webp',
+                        'folder/sprite@0.5x.png',
+                        'folder/sprite.webp',
+                        'folder/sprite.png',
                     ]
                 },
                 {
@@ -388,8 +391,8 @@ describe('Manifest', () =>
                         '1'
                     ],
                     src: [
+                        'folder2/1.ogg',
                         'folder2/1.mp3',
-                        'folder2/1.ogg'
                     ]
                 },
                 {
@@ -400,8 +403,8 @@ describe('Manifest', () =>
                         '1'
                     ],
                     src: [
+                        'folder2/folder3/1.ogg',
                         'folder2/folder3/1.mp3',
-                        'folder2/folder3/1.ogg'
                     ]
                 },
                 {
@@ -417,45 +420,90 @@ describe('Manifest', () =>
                 },
                 {
                     alias: [
-                        'spine/dragon.png',
-                        'spine/dragon',
-                        'dragon.png',
-                        'dragon'
-                    ],
-                    src: [
-                        'spine/dragon.png',
-                        'spine/dragon.webp',
-                        'spine/dragon@0.5x.png',
-                        'spine/dragon@0.5x.webp',
-                    ]
-                },
-                {
-                    alias: [
-                        'spine/dragon2.png',
-                        'spine/dragon2',
-                        'dragon2.png',
-                        'dragon2'
-                    ],
-                    src: [
-                        'spine/dragon2.png',
-                        'spine/dragon2.webp',
-                        'spine/dragon2@0.5x.png',
-                        'spine/dragon2@0.5x.webp',
-                    ]
-                },
-                {
-                    alias: [
                         'spine/dragon.atlas',
                         'spine/dragon',
                         'dragon.atlas',
                         'dragon'
                     ],
                     src: [
+                        'spine/dragon@0.5x.atlas',
                         'spine/dragon.atlas',
-                        'spine/dragon@0.5x.atlas'
                     ]
                 }
             ]
+        });
+    });
+
+    it('should not include spine atlas textures', async () =>
+    {
+        const testName = 'manifest-shortcut-atlas-textures';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        createFolder(pkg, {
+            name: testName,
+            files: [],
+            folders: [
+                {
+                    name: 'spine',
+                    files: [
+                        {
+                            name: 'dragon{spine}.atlas',
+                            content: assetPath(pkg, 'spine/dragon.atlas'),
+                        },
+                        {
+                            name: 'dragon.png',
+                            content: assetPath(pkg, 'spine/dragon.png'),
+                        },
+                        {
+                            name: 'dragon2.png',
+                            content: assetPath(pkg, 'spine/dragon2.png'),
+                        },
+                    ],
+                    folders: [],
+                },
+            ],
+        });
+
+        const assetpack = new AssetPack({
+            entry: inputDir,
+            output: outputDir,
+            cache: false,
+            pipes: [
+                texturePacker({
+                    resolutionOptions: {
+                        maximumTextureSize: 512,
+                    },
+                }),
+                audio(),
+                pixiManifest({
+                    createShortcuts: true,
+                    trimExtensions: false,
+                    includeMetaData: false
+                }),
+            ],
+        });
+
+        await assetpack.run();
+
+        // load the manifest json
+        const manifest =  sortObjectProperties((await readJSONSync(`${outputDir}/manifest.json`))) as any;
+
+        expect(manifest.bundles[0]).toEqual({
+
+            name: 'default',
+            assets: [
+                {
+                    alias: [
+                        'spine/dragon.atlas',
+                        'dragon.atlas'
+                    ],
+                    src: [
+                        'spine/dragon.atlas'
+                    ]
+                }
+            ]
+
         });
     });
 
@@ -535,6 +583,7 @@ describe('Manifest', () =>
 
         const assetpack = new AssetPack({
             entry: inputDir,
+            cache: false,
             output: outputDir,
             pipes: [
                 texturePacker({
@@ -551,6 +600,7 @@ describe('Manifest', () =>
                 pixiManifest({
                     createShortcuts: true,
                     trimExtensions: false,
+                    includeMetaData: false
                 }),
             ],
         });
@@ -574,45 +624,27 @@ describe('Manifest', () =>
                 {
                     alias: ['folder/sprite.png', 'sprite.png'],
                     src: [
-                        'folder/sprite.png',
-                        'folder/sprite.webp',
-                        'folder/sprite@0.5x.png',
                         'folder/sprite@0.5x.webp',
+                        'folder/sprite@0.5x.png',
+                        'folder/sprite.webp',
+                        'folder/sprite.png',
                     ],
                 },
                 {
                     alias: ['folder2/1.mp3', '1.mp3'],
-                    src: ['folder2/1.mp3', 'folder2/1.ogg'],
+                    src: ['folder2/1.ogg', 'folder2/1.mp3'],
                 },
                 {
                     alias: ['folder2/folder3/1.mp3', '1.mp3'],
-                    src: ['folder2/folder3/1.mp3', 'folder2/folder3/1.ogg'],
+                    src: ['folder2/folder3/1.ogg', 'folder2/folder3/1.mp3'],
                 },
                 {
                     alias: ['spine/dragon.json', 'dragon.json'],
                     src: ['spine/dragon.json'],
                 },
                 {
-                    alias: ['spine/dragon.png', 'dragon.png'],
-                    src: [
-                        'spine/dragon.png',
-                        'spine/dragon.webp',
-                        'spine/dragon@0.5x.png',
-                        'spine/dragon@0.5x.webp',
-                    ],
-                },
-                {
-                    alias: ['spine/dragon2.png', 'dragon2.png'],
-                    src: [
-                        'spine/dragon2.png',
-                        'spine/dragon2.webp',
-                        'spine/dragon2@0.5x.png',
-                        'spine/dragon2@0.5x.webp',
-                    ],
-                },
-                {
                     alias: ['spine/dragon.atlas', 'dragon.atlas'],
-                    src: ['spine/dragon.atlas', 'spine/dragon@0.5x.atlas'],
+                    src: ['spine/dragon@0.5x.atlas', 'spine/dragon.atlas'],
                 },
             ],
         });
@@ -695,6 +727,7 @@ describe('Manifest', () =>
         const assetpack = new AssetPack({
             entry: inputDir,
             output: outputDir,
+            cache: false,
             pipes: [
                 texturePacker({
                     resolutionOptions: {
@@ -710,6 +743,7 @@ describe('Manifest', () =>
                 pixiManifest({
                     createShortcuts: false,
                     trimExtensions: true,
+                    includeMetaData: false
                 }),
             ],
         });
@@ -746,10 +780,10 @@ describe('Manifest', () =>
                         'folder/sprite'
                     ],
                     src: [
-                        'folder/sprite.png',
-                        'folder/sprite.webp',
-                        'folder/sprite@0.5x.png',
                         'folder/sprite@0.5x.webp',
+                        'folder/sprite@0.5x.png',
+                        'folder/sprite.webp',
+                        'folder/sprite.png',
                     ]
                 },
                 {
@@ -758,18 +792,18 @@ describe('Manifest', () =>
                         'folder2/1'
                     ],
                     src: [
+                        'folder2/1.ogg',
                         'folder2/1.mp3',
-                        'folder2/1.ogg'
                     ]
                 },
                 {
                     alias: [
                         'folder2/folder3/1.mp3',
-                        'folder2/folder3/1'
+                        'folder2/folder3/1',
                     ],
                     src: [
+                        'folder2/folder3/1.ogg',
                         'folder2/folder3/1.mp3',
-                        'folder2/folder3/1.ogg'
                     ]
                 },
                 {
@@ -783,36 +817,12 @@ describe('Manifest', () =>
                 },
                 {
                     alias: [
-                        'spine/dragon.png',
-                        'spine/dragon'
-                    ],
-                    src: [
-                        'spine/dragon.png',
-                        'spine/dragon.webp',
-                        'spine/dragon@0.5x.png',
-                        'spine/dragon@0.5x.webp',
-                    ]
-                },
-                {
-                    alias: [
-                        'spine/dragon2.png',
-                        'spine/dragon2'
-                    ],
-                    src: [
-                        'spine/dragon2.png',
-                        'spine/dragon2.webp',
-                        'spine/dragon2@0.5x.png',
-                        'spine/dragon2@0.5x.webp',
-                    ]
-                },
-                {
-                    alias: [
                         'spine/dragon.atlas',
                         'spine/dragon'
                     ],
                     src: [
+                        'spine/dragon@0.5x.atlas',
                         'spine/dragon.atlas',
-                        'spine/dragon@0.5x.atlas'
                     ]
                 }
             ]
@@ -846,6 +856,7 @@ describe('Manifest', () =>
         const assetpack = new AssetPack({
             entry: inputDir,
             output: outputDir,
+            cache: false,
             pipes: [
                 pixiManifest({
                     output: `${outputDir}/manifest2.json`,
@@ -896,8 +907,11 @@ describe('Manifest', () =>
         const assetpack = new AssetPack({
             entry: inputDir,
             output: outputDir,
+            cache: false,
             pipes: [
-                pixiManifest(),
+                pixiManifest({
+                    includeMetaData: false
+                }),
             ],
         });
 
