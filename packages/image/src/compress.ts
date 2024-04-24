@@ -18,7 +18,7 @@ export interface CompressOptions extends PluginOptions<'nc'>
     jpg?: CompressJpgOptions | boolean;
 }
 
-export interface MipmapCompressImageData
+export interface CompressImageData
 {
     format: '.avif' | '.png' | '.webp' | '.jpg' | '.jpeg';
     resolution: number;
@@ -77,8 +77,8 @@ export function compress(options: CompressOptions = {}): AssetPipe<CompressOptio
 
             try
             {
-                const image: MipmapCompressImageData = {
-                    format: asset.extension as MipmapCompressImageData['format'],
+                const image: CompressImageData = {
+                    format: asset.extension as CompressImageData['format'],
                     resolution: 1,
                     sharpImage: sharp(asset.buffer),
                 };

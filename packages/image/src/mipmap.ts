@@ -1,6 +1,7 @@
 import type { Asset, AssetPipe, PluginOptions } from '@play-co/assetpack-core';
 import { checkExt, createNewAssetAt } from '@play-co/assetpack-core';
 import sharp from 'sharp';
+import type { CompressImageData } from './compress';
 import { mipmapSharp } from './utils/mipmapSharp';
 import { resolveOptions } from './utils/resolveOptions';
 
@@ -12,13 +13,6 @@ export interface MipmapOptions<T extends string = ''> extends PluginOptions<'fix
     resolutions?: {[x: string]: number};
     /** A resolution used if the fixed tag is applied. Resolution must match one found in resolutions. */
     fixedResolution?: string;
-}
-
-export interface MipmapCompressImageData
-{
-    format: '.avif' | '.png' | '.webp' | '.jpg' | '.jpeg';
-    resolution: number;
-    sharpImage: sharp.Sharp;
 }
 
 const defaultMipmapOptions: Required<MipmapOptions> = {
@@ -54,10 +48,10 @@ export function mipmap(_options: MipmapOptions = {}): AssetPipe<MipmapOptions>
         {
             const shouldMipmap =  mipmap && !asset.metaData[options.tags.fix as any];
 
-            let processedImages: MipmapCompressImageData[];
+            let processedImages: CompressImageData[];
 
-            const image: MipmapCompressImageData = {
-                format: asset.extension as MipmapCompressImageData['format'],
+            const image: CompressImageData = {
+                format: asset.extension as CompressImageData['format'],
                 resolution: 1,
                 sharpImage: sharp(asset.buffer),
             };

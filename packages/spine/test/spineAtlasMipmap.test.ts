@@ -1,7 +1,7 @@
 import { AssetPack } from '@play-co/assetpack-core';
 import { existsSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
-import { mipmap } from '@play-co/assetpack-plugin-mipmap';
+import { mipmap } from '@play-co/assetpack-plugin-image';
 import { spineAtlasMipmap } from '../src/spineAtlasMipmap';
 
 const pkg = 'spine';

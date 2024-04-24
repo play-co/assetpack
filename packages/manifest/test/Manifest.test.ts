@@ -1,8 +1,8 @@
 import { AssetPack } from '@play-co/assetpack-core';
 import { audio } from '@play-co/assetpack-plugin-ffmpeg';
+import { compress, mipmap } from '@play-co/assetpack-plugin-image';
 import { pixiManifest } from '@play-co/assetpack-plugin-manifest';
 import { spineAtlasMipmap } from '@play-co/assetpack-plugin-spine';
-import { compress } from '@play-co/assetpack-plugin-compress';
 import { texturePacker } from '@play-co/assetpack-plugin-texture-packer';
 import { existsSync, readJSONSync } from 'fs-extra';
 import type { File } from '../../../shared/test';
@@ -12,7 +12,6 @@ import {
     getInputDir,
     getOutputDir,
 } from '../../../shared/test';
-import { mipmap } from '@play-co/assetpack-plugin-mipmap';
 
 const pkg = 'manifest';
 

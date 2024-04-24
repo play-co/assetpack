@@ -3,7 +3,7 @@ import { existsSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { mipmap } from '../src/mipmap';
 
-const pkg = 'mipmap';
+const pkg = 'image';
 
 describe('Mipmap', () =>
 {

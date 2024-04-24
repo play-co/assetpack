@@ -3,7 +3,7 @@ import { existsSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { compress } from '../src/compress';
 
-const pkg = 'compress';
+const pkg = 'image';
 
 describe('Compress', () =>
 {

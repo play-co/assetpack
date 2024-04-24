@@ -1,10 +1,9 @@
 import { AssetPack } from '@play-co/assetpack-core';
+import { compress, mipmap } from '@play-co/assetpack-plugin-image';
 import { readFileSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { spineAtlasCompress } from '../src/spineAtlasCompress';
 import { spineAtlasMipmap } from '../src/spineAtlasMipmap';
-import { mipmap } from '@play-co/assetpack-plugin-mipmap';
-import { compress } from '@play-co/assetpack-plugin-compress';
 
 const pkg = 'spine';
 

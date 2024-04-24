@@ -1,5 +1,5 @@
 import { AssetPack } from '@play-co/assetpack-core';
-import { compress } from '@play-co/assetpack-plugin-compress';
+import { compress } from '@play-co/assetpack-plugin-image';
 import { texturePacker, texturePackerCompress } from '@play-co/assetpack-plugin-texture-packer';
 import { readJSONSync } from 'fs-extra';
 import type { File } from '../../../shared/test/index';

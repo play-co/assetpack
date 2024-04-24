@@ -1,5 +1,5 @@
 import { AssetPack } from '@play-co/assetpack-core';
-import { compress } from '@play-co/assetpack-plugin-compress';
+import { compress } from '@play-co/assetpack-plugin-image';
 import { readFileSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { spineAtlasCompress } from '../src/spineAtlasCompress';
