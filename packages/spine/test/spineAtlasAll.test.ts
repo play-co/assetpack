@@ -1,6 +1,6 @@
 import { AssetPack } from '@play-co/assetpack-core';
 import { compress, mipmap } from '@play-co/assetpack-plugin-image';
-import { readFileSync } from 'fs-extra';
+import { existsSync, readFileSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { spineAtlasCompress } from '../src/spineAtlasCompress';
 import { spineAtlasMipmap } from '../src/spineAtlasMipmap';
@@ -74,7 +74,7 @@ describe('Spine Atlas All', () =>
         expect(rawAtlasWebpHalf.includes('dragon2@0.5x.webp')).toBeTruthy();
     });
 
-    it.only('should correctly create files when Mipmap and CacheBuster are used', async () =>
+    it('should correctly create files when Mipmap and CacheBuster are used', async () =>
     {
         const testName = 'spine-atlas-mip-cache-buster';
         const inputDir = getInputDir(pkg, testName);
@@ -106,15 +106,13 @@ describe('Spine Atlas All', () =>
             output: outputDir,
             cache: false,
             pipes: [
-                mipmapCompress({
-                    mipmap: {
-                        resolutions: { default: 1, low: 0.5 },
-                    },
-                    compress: {
-                        png: true,
-                        jpg: true,
-                        webp: true,
-                    }
+                mipmap({
+                    resolutions: { default: 1, low: 0.5 },
+                }),
+                compress({
+                    png: true,
+                    webp: true,
+                    jpg: true,
                 }),
                 spineAtlasMipmap({
                     resolutions: { default: 1, low: 0.5 },
