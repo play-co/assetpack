@@ -1,6 +1,6 @@
 import { AssetPack } from '@play-co/assetpack-core';
-import { mipmapCompress } from '@play-co/assetpack-plugin-mipmap-compress';
-import { existsSync, readFileSync } from 'fs-extra';
+import { compress, mipmap } from '@play-co/assetpack-plugin-image';
+import { readFileSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { spineAtlasCompress } from '../src/spineAtlasCompress';
 import { spineAtlasMipmap } from '../src/spineAtlasMipmap';
@@ -43,15 +43,13 @@ describe('Spine Atlas All', () =>
             output: outputDir,
             cache: false,
             pipes: [
-                mipmapCompress({
-                    mipmap: {
-                        resolutions: { default: 1, low: 0.5 },
-                    },
-                    compress: {
-                        png: true,
-                        jpg: true,
-                        webp: true,
-                    }
+                compress({
+                    png: true,
+                    webp: true,
+                    jpg: true,
+                }),
+                mipmap({
+                    resolutions: { default: 1, low: 0.5 },
                 }),
                 spineAtlasMipmap({
                     resolutions: { default: 1, low: 0.5 },
