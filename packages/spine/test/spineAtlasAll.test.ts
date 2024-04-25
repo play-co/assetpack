@@ -74,7 +74,7 @@ describe('Spine Atlas All', () =>
         expect(rawAtlasWebpHalf.includes('dragon2@0.5x.webp')).toBeTruthy();
     });
 
-    it.only('should correctly create files when Mipmap and CacheBuster are used', async () =>
+    it('should correctly create files when Mipmap and CacheBuster are used', async () =>
     {
         const testName = 'spine-atlas-mip-cache-buster';
         const inputDir = getInputDir(pkg, testName);
