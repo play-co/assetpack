@@ -106,13 +106,13 @@ describe('Spine Atlas All', () =>
             output: outputDir,
             cache: false,
             pipes: [
+                mipmap({
+                    resolutions: { default: 1, low: 0.5 },
+                }),
                 compress({
                     png: true,
                     webp: true,
                     jpg: true,
-                }),
-                mipmap({
-                    resolutions: { default: 1, low: 0.5 },
                 }),
                 spineAtlasMipmap({
                     resolutions: { default: 1, low: 0.5 },

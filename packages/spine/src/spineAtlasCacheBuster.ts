@@ -1,8 +1,8 @@
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
 import { checkExt, type AssetPipe, findAssetsWithFileName } from '@play-co/assetpack-core';
-import type { MipmapOptions } from '@play-co/assetpack-plugin-mipmap-compress';
 import { AtlasView } from './AtlasView';
 import { removeSync, writeFileSync } from 'fs-extra';
+import type { MipmapOptions } from '@play-co/assetpack-plugin-image';
 
 export type SpineCacheBusterOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;
 

@@ -1,6 +1,6 @@
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
 import { checkExt, type AssetPipe, findAssetsWithFileName } from '@play-co/assetpack-core';
-import type { MipmapOptions } from '@play-co/assetpack-plugin-mipmap-compress';
+import type { MipmapOptions } from '@play-co/assetpack-plugin-image';
 import { removeSync, writeFileSync } from 'fs-extra';
 
 export type SpineOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;

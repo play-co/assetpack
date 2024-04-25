@@ -5,8 +5,8 @@ import { cacheBuster } from '@play-co/assetpack-plugin-cache-buster';
 import { readJSONSync } from 'fs-extra';
 import type { File } from 'shared/test';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test/index';
-import { mipmapCompress } from '@play-co/assetpack-plugin-mipmap-compress';
 import { texturePackerCompress } from '../src/texturePackerCompress';
+import { compress, mipmap } from '@play-co/assetpack-plugin-image';
 
 const pkg = 'texture-packer';
 
@@ -56,15 +56,13 @@ describe('Texture Packer All', () =>
                         resolutions: { default: 1, low: 0.5 },
                     },
                 }),
-                mipmapCompress({
-                    mipmap: {
-                        resolutions: { default: 1, low: 0.5 },
-                    },
-                    compress: {
-                        png: true,
-                        jpg: true,
-                        webp: true,
-                    }
+                mipmap({
+                    resolutions: { default: 1, low: 0.5 },
+                }),
+                compress({
+                    png: true,
+                    jpg: true,
+                    webp: true,
                 }),
                 texturePackerCompress({
                     png: true,
