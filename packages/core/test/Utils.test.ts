@@ -24,7 +24,7 @@ describe('Utils', () =>
         expect(extractTagsFromFileName('test{tag1}{tag2=1&2}.json')).toEqual({ tag1: true, tag2: [1, 2] });
     });
 
-    it.only('should allow for tags to be overridden', async () =>
+    it('should allow for tags to be overridden', async () =>
     {
         const testName = 'tag-override';
         const inputDir = getInputDir(pkg, testName);
