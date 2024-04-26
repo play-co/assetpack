@@ -1,5 +1,5 @@
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
-import { checkExt, type AssetPipe, findAssetsWithFileName } from '@play-co/assetpack-core';
+import { checkExt, type AssetPipe, findAssets } from '@play-co/assetpack-core';
 import type { MipmapOptions } from '@play-co/assetpack-plugin-image';
 import { removeSync, writeFileSync } from 'fs-extra';
 
@@ -69,7 +69,7 @@ export function texturePackerCacheBuster(_options?: SpineOptions): AssetPipe<Spi
 
                 const texture = json.meta.image;
 
-                const textureAssets = findAssetsWithFileName((asset) =>
+                const textureAssets = findAssets((asset) =>
                     asset.filename === texture, asset, true);
 
                 // last transformed child is the renamed texture
