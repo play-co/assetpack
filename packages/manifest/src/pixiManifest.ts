@@ -3,8 +3,7 @@ import {
     type Asset,
     type AssetPipe,
     type PipeSystem,
-    path,
-    stripTags
+    path
 } from '@play-co/assetpack-core';
 
 export interface PixiManifest

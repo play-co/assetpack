@@ -13,6 +13,7 @@ export * from './pipes/PipeSystem';
 export * from './utils/checkExt';
 export * from './utils/createNewAssetAt';
 export * from './utils/findAssets';
+export * from './utils/findAssets';
 export * from './utils/merge';
 export * from './utils/path';
 export * from './utils/stripTags';
