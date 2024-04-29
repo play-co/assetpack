@@ -1,4 +1,4 @@
-import { readJsonSync, writeJSONSync } from 'fs-extra';
+import fs from 'fs-extra';
 import { AtlasView } from './AtlasView';
 import { type AssetPipe, findAssets, path } from '@play-co/assetpack-core';
 
@@ -61,7 +61,7 @@ export function spineAtlasManifestMod(_options: SpineManifestOptions = {}): Asse
                     ? path.joinSafe(pipeSystem.outputPath, manifestLocation)
                     : manifestLocation;
 
-            const manifest = readJsonSync(newFileName);
+            const manifest = fs.readJsonSync(newFileName);
 
             atlasAssets.forEach((atlasAsset) =>
             {
@@ -79,8 +79,8 @@ export function spineAtlasManifestMod(_options: SpineManifestOptions = {}): Asse
                 });
             });
 
-            writeJSONSync(newFileName, manifest, { spaces: 2 });
-        },
+            fs.writeJSONSync(newFileName, manifest, { spaces: 2 });
+        }
     };
 }
 
