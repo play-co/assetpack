@@ -16,14 +16,16 @@ import { removeSync, writeFileSync } from 'fs-extra';
  * @param _options
  * @returns
  */
-export function texturePackerCacheBuster(): AssetPipe<null>
+export function texturePackerCacheBuster(): AssetPipe
 {
+    const defaultOptions = {};
+
     const textureJsonFilesToFix: Asset[] = [];
 
     return {
         folder: false,
         name: 'texture-packer-cache-buster',
-        defaultOptions: null,
+        defaultOptions,
         test(asset: Asset, _options)
         {
             return asset.allMetaData.tps && checkExt(asset.path, '.json');

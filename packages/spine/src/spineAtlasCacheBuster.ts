@@ -17,14 +17,16 @@ import { removeSync, writeFileSync } from 'fs-extra';
  * @param _options
  * @returns
  */
-export function spineAtlasCacheBuster(): AssetPipe<null>
+export function spineAtlasCacheBuster(): AssetPipe
 {
+    const defaultOptions = {};
+
     const atlasFileToFix: Asset[] = [];
 
     return {
         folder: false,
         name: 'spine-cache-buster',
-        defaultOptions: null,
+        defaultOptions,
         test(asset: Asset, _options)
         {
             return checkExt(asset.path, '.atlas');
