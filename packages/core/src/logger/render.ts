@@ -70,7 +70,19 @@ export function resetWindow()
 }
 
 const progressBar = new cliProgress.SingleBar({
-    format: `${chalk.green('{bar}')} {percentage}%`,
+    format: `| ${chalk.green('{bar}')} | {percentage}%`,
+    barIncompleteString: '\u25A0',
+    formatBar: (progress, options) =>
+    {
+        // calculate barsize
+        const completeSize = Math.round(progress * options.barsize!);
+        const incompleteSize = options.barsize! - completeSize;
+
+        // generate bar string
+        return chalk.green(options.barCompleteString!.substr(0, completeSize))
+                    + options.barGlue
+                    + chalk.grey(options.barIncompleteString!.substr(0, incompleteSize));
+    }
 }, cliProgress.Presets.rect);
 
 export function startProgress()
