@@ -175,7 +175,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
 
                         textureAsset.metaData[tags.fix] = true;
 
-                        jsonAsset.internalMetaData.page = i;
+                        jsonAsset.transformData.page = i;
 
                         assets.push(textureAsset, jsonAsset);
                     }

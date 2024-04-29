@@ -124,9 +124,9 @@ function getTexturePackedAssets(assets: Asset[])
     {
         const jsonAsset = jsonAssets[i];
 
-        groupAssets[jsonAsset.internalMetaData.page] ??= [];
+        groupAssets[jsonAsset.transformData.page] ??= [];
 
-        groupAssets[jsonAsset.internalMetaData.page].push(jsonAsset);
+        groupAssets[jsonAsset.transformData.page].push(jsonAsset);
     }
 
     return groupAssets;
