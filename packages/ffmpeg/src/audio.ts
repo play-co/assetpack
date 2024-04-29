@@ -34,5 +34,7 @@ export function audio(_options?: FfmpegOptions): AssetPipe
 
     const audio = ffmpeg(merge(true, defaultOptions, _options));
 
+    audio.name = 'audio';
+
     return audio;
 }

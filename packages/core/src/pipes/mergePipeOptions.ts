@@ -1,9 +1,11 @@
-import type { Asset } from '../Asset';
-import type { AssetPipe } from './AssetPipe';
+import { merge } from '../utils/merge';
 
-export function mergePipeOptions<T>(pipe: AssetPipe<T>, asset: Asset): T
+import type { Asset } from '../Asset';
+import type { AssetPipe, PluginOptions } from './AssetPipe';
+
+export function mergePipeOptions<T extends PluginOptions<any>>(pipe: AssetPipe<T>, asset: Asset): T
 {
     if (!asset.settings) return pipe.defaultOptions;
 
-    return { ...pipe.defaultOptions, ...asset.settings };
+    return merge.recursive(pipe.defaultOptions, asset.settings);
 }

@@ -6,7 +6,7 @@ import { checkExt, createNewAssetAt, stripTags } from '@play-co/assetpack-core';
 import type { BitmapFontOptions } from 'msdf-bmfont-xml';
 import type { Asset, AssetPipe, PluginOptions } from '@play-co/assetpack-core';
 
-export interface SDFFontOptions extends PluginOptions<'sdf'>
+export interface SDFFontOptions extends PluginOptions<'font' | 'nc' | 'fix'>
 {
     name: string,
     type: BitmapFontOptions['fieldType'],
@@ -23,7 +23,7 @@ export function signedFont(
         defaultOptions,
         test(asset: Asset, options)
         {
-            return asset.allMetaData[options.type] && checkExt(asset.path, '.ttf');
+            return asset.allMetaData[options.tags.font] && checkExt(asset.path, '.ttf');
         },
         async transform(asset: Asset, options)
         {
@@ -46,8 +46,8 @@ export function signedFont(
                 const newTextureAsset = createNewAssetAt(asset, newTextureName);
 
                 // don't compress!
-                newTextureAsset.metaData.nc = true;
-                newTextureAsset.metaData.fix = true;
+                newTextureAsset.metaData[options.tags.nc] = true;
+                newTextureAsset.metaData[options.tags.fix] = true;
 
                 assets.push(newTextureAsset);
 
@@ -72,16 +72,28 @@ export function sdfFont(options: Partial<SDFFontOptions> = {}): AssetPipe
     return signedFont({
         name: 'sdf-font',
         type: 'sdf',
-        ...options
+        ...options,
+        tags: {
+            font: 'sdf',
+            nc: 'nc',
+            fix: 'fix',
+            ...options.tags
+        }
     });
 }
 
-export function msdfFont(options?: Partial<SDFFontOptions>): AssetPipe
+export function msdfFont(options: Partial<SDFFontOptions> = {}): AssetPipe
 {
     return signedFont({
         name: 'msdf-font',
         type: 'msdf',
         ...options,
+        tags: {
+            font: 'msdf',
+            nc: 'nc',
+            fix: 'fix',
+            ...options.tags
+        }
     });
 }
 
