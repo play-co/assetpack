@@ -1,4 +1,4 @@
-import { removeSync, writeFileSync } from 'fs-extra';
+import fs from 'fs-extra';
 import { type AssetPipe, checkExt, findAssets } from '@play-co/assetpack-core';
 
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
@@ -79,10 +79,10 @@ export function texturePackerCacheBuster(
 
                 jsonAsset.path = jsonAsset.path.replace(originalHash, jsonAsset.hash);
 
-                removeSync(originalPath);
+                fs.removeSync(originalPath);
 
                 // rewrite..
-                writeFileSync(jsonAsset.path, jsonAsset.buffer);
+                fs.writeFileSync(jsonAsset.path, jsonAsset.buffer);
             });
 
             textureJsonFilesToFix.length = 0;

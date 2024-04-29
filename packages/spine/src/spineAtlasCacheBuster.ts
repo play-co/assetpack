@@ -1,4 +1,4 @@
-import { removeSync, writeFileSync } from 'fs-extra';
+import fs from 'fs-extra';
 import { AtlasView } from './AtlasView';
 import { type AssetPipe, checkExt, findAssets } from '@play-co/assetpack-core';
 
@@ -72,10 +72,10 @@ export function spineAtlasCacheBuster(): AssetPipe
 
                 atlasAsset.path = atlasAsset.path.replace(originalHash, atlasAsset.hash);
 
-                removeSync(originalPath);
+                fs.removeSync(originalPath);
 
                 // rewrite..
-                writeFileSync(atlasAsset.path, atlasAsset.buffer);
+                fs.writeFileSync(atlasAsset.path, atlasAsset.buffer);
             });
 
             atlasFileToFix.length = 0;

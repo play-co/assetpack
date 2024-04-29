@@ -1,4 +1,4 @@
-import { existsSync, readJsonSync, writeJSONSync } from 'fs-extra';
+import fs from 'fs-extra';
 import { type AssetPipe, findAssets, path } from '@play-co/assetpack-core';
 
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
@@ -53,7 +53,7 @@ export function texturePackerManifestMod(
             const newFileName = path.dirname(manifestLocation) === '.'
                 ? path.joinSafe(pipeSystem.outputPath, manifestLocation) : manifestLocation;
 
-            if (!existsSync(newFileName))
+            if (!fs.existsSync(newFileName))
             {
                 // eslint-disable-next-line max-len
                 console.warn(`[Assetpack] Texture Packer Manifest could not find the manifest: ${newFileName}. Please ensure that the 'pixiManifest' output and the 'texturePackerManifest' output are the same.`);
@@ -61,7 +61,7 @@ export function texturePackerManifestMod(
                 return;
             }
 
-            const manifest = readJsonSync(newFileName);
+            const manifest = fs.readJsonSync(newFileName);
 
             // used to make sure we don't process the same asset twice.
             const duplicateHash: Record<string, boolean> = {};
@@ -106,7 +106,7 @@ export function texturePackerManifestMod(
             });
 
             // write the new manifest.
-            writeJSONSync(newFileName, manifest, { spaces: 2 });
+            fs.writeJSONSync(newFileName, manifest, { spaces: 2 });
 
             return;
         }
