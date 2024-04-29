@@ -2,7 +2,9 @@ import { removeSync, writeFileSync } from 'fs-extra';
 import { AtlasView } from './AtlasView';
 import { type AssetPipe, checkExt, findAssets } from '@play-co/assetpack-core';
 
-import type { Asset } from '@play-co/assetpack-core';
+import type { Asset, PluginOptions } from '@play-co/assetpack-core';
+
+export type SpineAtlasCacheBustOptions = PluginOptions<'spine'>;
 
 /**
  * This should be used after the cache buster plugin in the pipes.
@@ -18,9 +20,14 @@ import type { Asset } from '@play-co/assetpack-core';
  * @param _options
  * @returns
  */
-export function spineAtlasCacheBuster(): AssetPipe
+export function spineAtlasCacheBuster(_options: SpineAtlasCacheBustOptions = {}): AssetPipe
 {
-    const defaultOptions = {};
+    const defaultOptions = {
+        tags: {
+            spine: 'spine',
+            ..._options.tags,
+        },
+    };
 
     const atlasFileToFix: Asset[] = [];
 
@@ -28,9 +35,9 @@ export function spineAtlasCacheBuster(): AssetPipe
         folder: false,
         name: 'spine-cache-buster',
         defaultOptions,
-        test(asset: Asset, _options)
+        test(asset: Asset, options)
         {
-            return checkExt(asset.path, '.atlas');
+            return checkExt(asset.path, '.atlas') && asset.metaData[options.tags.spine];
         },
 
         async transform(asset: Asset, _options)

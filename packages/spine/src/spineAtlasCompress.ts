@@ -4,14 +4,15 @@ import { checkExt, createNewAssetAt, swapExt } from '@play-co/assetpack-core';
 import type { Asset, AssetPipe, PluginOptions } from '@play-co/assetpack-core';
 import type { CompressOptions } from '@play-co/assetpack-plugin-image';
 
-export type SpineAtlasCompressOptions = PluginOptions<'nc'> & CompressOptions;
+export type SpineAtlasCompressOptions = PluginOptions<'nc' | 'spine'> & CompressOptions;
 
 export function spineAtlasCompress(_options?: SpineAtlasCompressOptions): AssetPipe<SpineAtlasCompressOptions>
 {
     const defaultOptions = {
         ..._options,
         tags: {
-            tps: 'nc',
+            nc: 'nc',
+            spine: 'spine',
             ..._options?.tags
         }
     };
@@ -22,7 +23,8 @@ export function spineAtlasCompress(_options?: SpineAtlasCompressOptions): AssetP
         test(asset: Asset, options)
         {
             return !asset.allMetaData[options.tags.nc]
-                && checkExt(asset.path, '.atlas');
+                && checkExt(asset.path, '.atlas')
+                && asset.metaData[options.tags.spine];
         },
         async transform(asset: Asset, options)
         {

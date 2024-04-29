@@ -3,7 +3,7 @@ import { type AssetPipe, checkExt, createNewAssetAt } from '@play-co/assetpack-c
 import type { Asset, PluginOptions } from '@play-co/assetpack-core';
 import type { MipmapOptions } from '@play-co/assetpack-plugin-image';
 
-export type SpineOptions = PluginOptions<'fix'> & MipmapOptions;
+export type SpineOptions = PluginOptions<'fix' | 'spine'> & MipmapOptions;
 
 export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOptions>
 {
@@ -14,6 +14,7 @@ export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOption
         ..._options,
         tags: {
             fix: 'fix',
+            spine: 'spine',
             ..._options?.tags
         },
     };
@@ -24,7 +25,9 @@ export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOption
         defaultOptions,
         test(asset: Asset, options)
         {
-            return !asset.allMetaData[options.tags.fix as any] && checkExt(asset.path, '.atlas');
+            return !asset.allMetaData[options.tags.fix]
+                && checkExt(asset.path, '.atlas')
+                && asset.metaData[options.tags.spine];
         },
         async transform(asset: Asset, options)
         {
