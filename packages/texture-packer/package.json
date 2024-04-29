@@ -1,6 +1,6 @@
 {
   "name": "@play-co/assetpack-plugin-texture-packer",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "",
   "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/texture-packer/#readme",
   "bugs": "https://github.com/pixijs/assetpack/issues",
@@ -35,12 +35,10 @@
     "maxrects-packer": "^2.7.3",
     "sharp": "^0.33.3"
   },
-
   "devDependencies": {
-    "@play-co/assetpack-core": "1.3.0",
-    "@play-co/assetpack-plugin-image": "1.3.0",
-    "@play-co/assetpack-plugin-manifest": "1.3.0"
-
+    "@play-co/assetpack-core": "1.4.0",
+    "@play-co/assetpack-plugin-image": "1.4.0",
+    "@play-co/assetpack-plugin-manifest": "1.4.0"
   },
   "peerDependencies": {
     "@play-co/assetpack-core": ">=0.0.0",
