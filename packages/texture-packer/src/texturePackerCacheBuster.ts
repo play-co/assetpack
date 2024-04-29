@@ -1,9 +1,6 @@
-import type { Asset, PluginOptions } from '@play-co/assetpack-core';
+import type { Asset } from '@play-co/assetpack-core';
 import { checkExt, type AssetPipe, findAssetsWithFileName } from '@play-co/assetpack-core';
-import type { MipmapOptions } from '@play-co/assetpack-plugin-image';
 import { removeSync, writeFileSync } from 'fs-extra';
-
-export type SpineOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;
 
 /**
  * This should be used after the cache buster plugin in the pipes.
@@ -19,25 +16,14 @@ export type SpineOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;
  * @param _options
  * @returns
  */
-export function texturePackerCacheBuster(_options?: SpineOptions): AssetPipe<SpineOptions>
+export function texturePackerCacheBuster(): AssetPipe<null>
 {
-    const defaultOptions = {
-        template: '@%%x',
-        resolutions: { default: 1, low: 0.5 },
-        fixedResolution: 'default',
-        ..._options,
-        tags: {
-            fix: 'fix',
-            ..._options?.tags
-        },
-    };
-
     const textureJsonFilesToFix: Asset[] = [];
 
     return {
         folder: false,
         name: 'texture-packer-cache-buster',
-        defaultOptions,
+        defaultOptions: null,
         test(asset: Asset, _options)
         {
             return asset.allMetaData.tps && checkExt(asset.path, '.json');

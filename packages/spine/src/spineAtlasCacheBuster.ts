@@ -1,10 +1,7 @@
-import type { Asset, PluginOptions } from '@play-co/assetpack-core';
+import type { Asset } from '@play-co/assetpack-core';
 import { checkExt, type AssetPipe, findAssetsWithFileName } from '@play-co/assetpack-core';
 import { AtlasView } from './AtlasView';
 import { removeSync, writeFileSync } from 'fs-extra';
-import type { MipmapOptions } from '@play-co/assetpack-plugin-image';
-
-export type SpineCacheBusterOptions = PluginOptions<'fix' | 'nc'> & MipmapOptions;
 
 /**
  * This should be used after the cache buster plugin in the pipes.
@@ -20,22 +17,14 @@ export type SpineCacheBusterOptions = PluginOptions<'fix' | 'nc'> & MipmapOption
  * @param _options
  * @returns
  */
-export function spineAtlasCacheBuster(_options?: SpineCacheBusterOptions): AssetPipe<SpineCacheBusterOptions>
+export function spineAtlasCacheBuster(): AssetPipe<null>
 {
-    const defaultOptions = {
-        ..._options,
-        tags: {
-            fix: 'fix',
-            ..._options?.tags
-        },
-    };
-
     const atlasFileToFix: Asset[] = [];
 
     return {
         folder: false,
         name: 'spine-cache-buster',
-        defaultOptions,
+        defaultOptions: null,
         test(asset: Asset, _options)
         {
             return checkExt(asset.path, '.atlas');
