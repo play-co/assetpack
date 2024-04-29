@@ -31,6 +31,7 @@ export class Asset
     metaData: Record<string, any> = {};
     inheritedMetaData: Record<string, any> = {};
     allMetaData: Record<string, any> = {};
+    transformData: Record<string, any> = {};
 
     settings?: Record<string, any>;
 
@@ -62,6 +63,7 @@ export class Asset
         asset.parent = this;
 
         asset.inheritedMetaData = { ...this.inheritedMetaData, ...this.metaData };
+        asset.transformData = { ...this.transformData };
 
         asset.allMetaData = { ...asset.inheritedMetaData, ...asset.metaData };
     }
@@ -84,6 +86,7 @@ export class Asset
         asset.transformParent = this;
 
         asset.inheritedMetaData = { ...this.inheritedMetaData, ...this.metaData };
+        asset.transformData = { ...this.transformData };
 
         asset.allMetaData = { ...asset.inheritedMetaData, ...asset.metaData };
 

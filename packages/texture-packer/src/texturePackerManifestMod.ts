@@ -1,9 +1,9 @@
 import fs from 'fs-extra';
 import { type AssetPipe, findAssets, path } from '@play-co/assetpack-core';
 
-import type { Asset } from '@play-co/assetpack-core';
+import type { Asset, PluginOptions } from '@play-co/assetpack-core';
 
-export interface TexturePackerManifestOptions
+export interface TexturePackerManifestOptions extends PluginOptions<'tps'>
 {
     output?: string;
 }
@@ -34,7 +34,11 @@ export function texturePackerManifestMod(
 {
     const defaultOptions = {
         output: 'manifest.json',
-        ..._options
+        ..._options,
+        tags: {
+            tps: 'tps',
+            ..._options.tags,
+        },
     };
 
     return {
@@ -63,7 +67,7 @@ export function texturePackerManifestMod(
             const duplicateHash: Record<string, boolean> = {};
 
             const originalJsonAssets = findAssets((asset) =>
-                asset.metaData.tps && !asset.transformParent, asset, true);
+                asset.metaData[options.tags.tps] && !asset.transformParent, asset, true);
 
             originalJsonAssets.forEach((originalJsonAsset) =>
             {
@@ -120,9 +124,9 @@ function getTexturePackedAssets(assets: Asset[])
     {
         const jsonAsset = jsonAssets[i];
 
-        groupAssets[jsonAsset.allMetaData.page] ??= [];
+        groupAssets[jsonAsset.transformData.page] ??= [];
 
-        groupAssets[jsonAsset.allMetaData.page].push(jsonAsset);
+        groupAssets[jsonAsset.transformData.page].push(jsonAsset);
     }
 
     return groupAssets;

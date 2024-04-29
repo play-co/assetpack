@@ -11,7 +11,7 @@ export function spineAtlasCompress(_options?: SpineAtlasCompressOptions): AssetP
     const defaultOptions = {
         ..._options,
         tags: {
-            tps: 'nc',
+            nc: 'nc',
             ..._options?.tags
         }
     };

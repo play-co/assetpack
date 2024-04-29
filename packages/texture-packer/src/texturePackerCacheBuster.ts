@@ -1,7 +1,9 @@
 import fs from 'fs-extra';
 import { type AssetPipe, checkExt, findAssets } from '@play-co/assetpack-core';
 
-import type { Asset } from '@play-co/assetpack-core';
+import type { Asset, PluginOptions } from '@play-co/assetpack-core';
+
+export type TexturePackerCacheBustOptions = PluginOptions<'tps'>;
 
 /**
  * This should be used after the cache buster plugin in the pipes.
@@ -17,9 +19,16 @@ import type { Asset } from '@play-co/assetpack-core';
  * @param _options
  * @returns
  */
-export function texturePackerCacheBuster(): AssetPipe
+export function texturePackerCacheBuster(
+    _options: TexturePackerCacheBustOptions = {}
+): AssetPipe<TexturePackerCacheBustOptions>
 {
-    const defaultOptions = {};
+    const defaultOptions = {
+        tags: {
+            tps: 'tps',
+            ..._options.tags,
+        },
+    };
 
     const textureJsonFilesToFix: Asset[] = [];
 
@@ -27,9 +36,9 @@ export function texturePackerCacheBuster(): AssetPipe
         folder: false,
         name: 'texture-packer-cache-buster',
         defaultOptions,
-        test(asset: Asset, _options)
+        test(asset: Asset, options)
         {
-            return asset.allMetaData.tps && checkExt(asset.path, '.json');
+            return asset.allMetaData[options.tags.tps] && checkExt(asset.path, '.json');
         },
 
         async transform(asset: Asset, _options)

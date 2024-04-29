@@ -6,7 +6,7 @@ import { createNewAssetAt, Logger, path, stripTags } from '@play-co/assetpack-co
 import type { PackTexturesOptions, TexturePackerFormat } from './packer/packTextures';
 import type { Asset, AssetPipe, PluginOptions } from '@play-co/assetpack-core';
 
-export interface TexturePackerOptions extends PluginOptions<'tps' | 'fix' | 'jpg' | 'nc' >
+export interface TexturePackerOptions extends PluginOptions<'tps' | 'fix' | 'jpg' >
 {
     texturePacker?: Partial<PackTexturesOptions>;
     resolutionOptions?: {
@@ -66,7 +66,6 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
             tps: 'tps',
             fix: 'fix',
             jpg: 'jpg',
-            nc: 'nc',
             ..._options.tags,
         }
     } as TexturePackerOptions;
@@ -95,13 +94,13 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
             const fixedResolutions: {[x: string]: number} = {};
 
             // eslint-disable-next-line max-len
-            fixedResolutions[resolutionOptions.fixedResolution as any] = resolutionOptions.resolutions[resolutionOptions.fixedResolution];
+            fixedResolutions[resolutionOptions.fixedResolution] = resolutionOptions.resolutions[resolutionOptions.fixedResolution];
 
             // skip the children so that they do not get processed!
             asset.skipChildren();
 
             const largestResolution = Math.max(...Object.values(resolutionOptions.resolutions));
-            const resolutionHash = asset.allMetaData[tags.fix as any] ? fixedResolutions : resolutionOptions.resolutions;
+            const resolutionHash = asset.allMetaData[tags.fix] ? fixedResolutions : resolutionOptions.resolutions;
 
             const globPath = `${asset.path}/**/*.{jpg,png,gif}`;
             const files = await glob(globPath);
@@ -118,7 +117,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
                 return { path: stripTags(path.relative(asset.path, f)), contents };
             }));
 
-            const textureFormat = (asset.metaData[tags.jpg as any] ? 'jpg' : 'png') as TexturePackerFormat;
+            const textureFormat = (asset.metaData[tags.jpg] ? 'jpg' : 'png') as TexturePackerFormat;
 
             const texturePackerOptions = {
                 ...texturePacker,
@@ -176,7 +175,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
 
                         textureAsset.metaData[tags.fix] = true;
 
-                        jsonAsset.metaData.page = i;
+                        jsonAsset.transformData.page = i;
 
                         assets.push(textureAsset, jsonAsset);
                     }

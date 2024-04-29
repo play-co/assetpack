@@ -1,14 +1,17 @@
 import { fonts } from './fonts';
 import { checkExt, createNewAssetAt, path } from '@play-co/assetpack-core';
 
-import type { Asset, AssetPipe } from '@play-co/assetpack-core';
+import type { Asset, AssetPipe, PluginOptions } from '@play-co/assetpack-core';
 
-export function webfont(): AssetPipe
+export type WebfontOptions = PluginOptions<'wf'>;
+
+export function webfont(_options?: Partial<WebfontOptions>): AssetPipe<WebfontOptions>
 {
-    const defaultOptions = {
+    const defaultOptions: WebfontOptions = {
         tags: {
             wf: 'wf',
-        }
+            ..._options?.tags
+        },
     };
 
     return {
@@ -17,7 +20,7 @@ export function webfont(): AssetPipe
         defaultOptions,
         test(asset: Asset, options)
         {
-            return asset.metaData[options.tags.wf as any] && checkExt(asset.path, '.otf', '.ttf', '.svg');
+            return asset.allMetaData[options.tags.wf] && checkExt(asset.path, '.otf', '.ttf', '.svg');
         },
         async transform(asset: Asset)
         {
