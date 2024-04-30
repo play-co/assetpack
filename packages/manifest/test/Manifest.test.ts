@@ -357,9 +357,7 @@ describe('Manifest', () =>
                 {
                     alias: [
                         'folder/json.json',
-                        'folder/json',
                         'json.json',
-                        'json'
                     ],
                     src: [
                         'folder/json.json'
@@ -368,9 +366,7 @@ describe('Manifest', () =>
                 {
                     alias: [
                         'folder/json.json5',
-                        'folder/json',
                         'json.json5',
-                        'json'
                     ],
                     src: [
                         'folder/json.json5'
@@ -394,8 +390,6 @@ describe('Manifest', () =>
                     alias: [
                         'folder2/1.mp3',
                         'folder2/1',
-                        '1.mp3',
-                        '1'
                     ],
                     src: [
                         'folder2/1.ogg',
@@ -406,8 +400,6 @@ describe('Manifest', () =>
                     alias: [
                         'folder2/folder3/1.mp3',
                         'folder2/folder3/1',
-                        '1.mp3',
-                        '1'
                     ],
                     src: [
                         'folder2/folder3/1.ogg',
@@ -417,9 +409,7 @@ describe('Manifest', () =>
                 {
                     alias: [
                         'spine/dragon.json',
-                        'spine/dragon',
                         'dragon.json',
-                        'dragon'
                     ],
                     src: [
                         'spine/dragon.json'
@@ -428,9 +418,7 @@ describe('Manifest', () =>
                 {
                     alias: [
                         'spine/dragon.atlas',
-                        'spine/dragon',
                         'dragon.atlas',
-                        'dragon'
                     ],
                     src: [
                         'spine/dragon@0.5x.atlas',
