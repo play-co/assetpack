@@ -29,6 +29,8 @@ export async function createTextureData(options: Required<PackTexturesOptions>)
         const newWidth = Math.ceil(metaData.width * scale);
         const newHeight = Math.ceil(metaData.height * scale);
 
+        const allowTrim = options.allowTrim && newWidth >= 3 && newHeight >= 3;
+
         if (scale < 1)
         {
             sharpImage = sharpImage
@@ -37,13 +39,13 @@ export async function createTextureData(options: Required<PackTexturesOptions>)
                     height: newHeight,
                 });
 
-            if (options.allowTrim)
+            if (allowTrim)
             {
                 sharpImage = sharp(await sharpImage.toBuffer());
             }
         }
 
-        if (options.allowTrim)
+        if (allowTrim)
         {
             sharpImage = sharpImage
                 .trim({
