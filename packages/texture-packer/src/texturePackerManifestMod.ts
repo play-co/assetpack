@@ -86,14 +86,17 @@ export function texturePackerManifestMod(
 
                 const { manifestAsset, bundle } = findManifestAsset(manifest, jsonManifestPath);
 
+                const texturePackedAssets = getTexturePackedAssets(finalJsonAssets);
+
                 // now we need to get the pages of the sprite sheet and update the manifest with the new pages.
-                getTexturePackedAssets(finalJsonAssets).forEach((pages, pageIndex) =>
+                texturePackedAssets.forEach((pages, pageIndex) =>
                 {
                     bundle.assets.push({
                         // use the same alias as the original asset but add the page index to it.
                         // we don't control what the alias is so we use whats here.
-                        alias: manifestAsset.alias.map((alias: string[]) =>
-                            `${alias}-${pageIndex}`),
+                        alias: manifestAsset.alias.map((alias: string) =>
+                            getAlias(alias, pageIndex, texturePackedAssets.length > 1)
+                        ),
                         src: pages
                             .map((finalAsset) => path.relative(pipeSystem.outputPath, finalAsset.path))
                             .sort((a, b) => b.localeCompare(a)),
@@ -151,4 +154,14 @@ function findManifestAsset(manifest: any, assetPath: string): {bundle: any, mani
     }
 
     return { bundle: null, manifestAsset: null };
+}
+
+function getAlias(alias: string, pageIndex: number, multiPage: boolean)
+{
+    if (multiPage)
+    {
+        return `${alias}-${pageIndex}`;
+    }
+
+    return alias;
 }

@@ -1,3 +1,4 @@
+import { readJSONSync } from 'fs-extra';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test/index';
 import { texturePackerManifestMod } from '../src/texturePackerManifestMod';
 import { AssetPack } from '@play-co/assetpack-core';
@@ -52,6 +53,50 @@ describe('Texture Packer Compression', () =>
                 texturePacker({
                     resolutionOptions: {
                         resolutions: { default: 1 },
+                    },
+                }),
+                pixiManifest(),
+                texturePackerManifestMod(),
+            ]
+        });
+
+        await assetpack.run();
+
+        const manifest = readJSONSync(`${outputDir}/manifest.json`);
+
+        expect(manifest.bundles[0].assets[0]).toEqual({
+
+            alias: [
+                'sprites'
+            ],
+            src: [
+                'sprites.json'
+            ],
+            data: {
+                tags: {
+                    tps: true
+                }
+            }
+
+        });
+    });
+
+    it('should create a multi page sprite sheet', async () =>
+    {
+        const testName = 'tp-manifest-multi-page';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        genFolder(testName);
+
+        const assetpack = new AssetPack({
+            entry: inputDir,
+            output: outputDir,
+            cache: false,
+            pipes: [
+                texturePacker({
+                    resolutionOptions: {
+                        resolutions: { default: 1 },
                         maximumTextureSize: 512
                     },
                 }),
@@ -62,10 +107,35 @@ describe('Texture Packer Compression', () =>
 
         await assetpack.run();
 
-        // const sheetPng = readJSONSync(`${outputDir}/sprites.png.json`);
-        // const sheetWebp = readJSONSync(`${outputDir}/sprites.webp.json`);
+        const manifest = readJSONSync(`${outputDir}/manifest.json`);
 
-        // expect(sheetPng.meta.image).toEqual(`sprites.png`);
-        // expect(sheetWebp.meta.image).toEqual(`sprites.webp`);
+        expect(manifest.bundles[0].assets).toEqual([
+            {
+                alias: [
+                    'sprites-0'
+                ],
+                src: [
+                    'sprites-0.json'
+                ],
+                data: {
+                    tags: {
+                        tps: true
+                    }
+                }
+            },
+            {
+                alias: [
+                    'sprites-1'
+                ],
+                src: [
+                    'sprites-1.json'
+                ],
+                data: {
+                    tags: {
+                        tps: true
+                    }
+                }
+            }
+        ]);
     });
 });
