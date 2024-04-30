@@ -37,12 +37,14 @@ describe('AssetCache', () =>
         expect(cachedAssetData).toEqual({
             test: {
                 isFolder: true,
-                metaData: {}
+                metaData: {},
+                transformData: {},
             },
             'test/test.json': {
                 isFolder: false,
                 hash: '12345',
                 parent: 'test',
+                transformData: {},
                 metaData: {}
             }
         });

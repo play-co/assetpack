@@ -63,9 +63,8 @@ export class Asset
         asset.parent = this;
 
         asset.inheritedMetaData = { ...this.inheritedMetaData, ...this.metaData };
-        asset.transformData = { ...this.transformData };
-
         asset.allMetaData = { ...asset.inheritedMetaData, ...asset.metaData };
+        asset.transformData = { ...this.transformData, ...asset.transformData };
     }
 
     removeChild(asset: Asset)
@@ -86,9 +85,8 @@ export class Asset
         asset.transformParent = this;
 
         asset.inheritedMetaData = { ...this.inheritedMetaData, ...this.metaData };
-        asset.transformData = { ...this.transformData };
-
         asset.allMetaData = { ...asset.inheritedMetaData, ...asset.metaData };
+        asset.transformData = { ...this.transformData, ...asset.transformData };
 
         asset.settings = this.settings;
     }

@@ -96,6 +96,7 @@ function syncTransformedAssetsFromCache(assetHash: Record<string, Asset>, cached
             });
 
             transformedAsset.metaData = cachedAssetData.metaData;
+            transformedAsset.transformData = cachedAssetData.transformData;
 
             transformedAssets[i] = transformedAsset;
             assetHash[i] = transformedAsset;

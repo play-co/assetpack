@@ -54,7 +54,8 @@ export class AssetCache
             isFolder: asset.isFolder,
             parent: asset.parent?.path,
             transformParent: asset.transformParent?.path,
-            metaData: asset.metaData
+            metaData: asset.metaData,
+            transformData: asset.transformData
         };
 
         if (!asset.isFolder && saveHash)
@@ -83,6 +84,7 @@ export interface CachedAsset
     hash?: string;
     parent: string | undefined;
     metaData: Record<string, any>;
+    transformData: Record<string, any>;
     transformParent: string | undefined;
 }
 
