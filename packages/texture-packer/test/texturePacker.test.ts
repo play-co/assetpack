@@ -582,4 +582,77 @@ describe('Texture Packer', () =>
         // Restore console.warn
         mockWarn.mockRestore();
     });
+
+    it.only('should handle smaller than 3x3 textures if trimming is enabled', async () =>
+    {
+        const testName = 'tp-small-trim';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        const sprites: File[] = [];
+
+        sprites.push({
+            name: `sprite.png`,
+            content: assetPath(pkg, `sp-1.png`),
+        });
+
+        sprites.push({
+            name: `empty2x2.png`,
+            content: assetPath(pkg, `2x2-small-empty-texture.png`),
+        });
+
+        createFolder(
+            pkg,
+            {
+                name: testName,
+                files: [],
+                folders: [
+                    {
+                        name: 'sprites{tps}',
+                        files: sprites,
+                        folders: [],
+                    },
+                ],
+            });
+
+        const assetpack = new AssetPack({
+            entry: inputDir,
+            output: outputDir,
+            cache: false,
+            pipes: [
+                texturePacker({
+                    resolutionOptions: { resolutions: { default: 1 } },
+                }),
+            ]
+        });
+
+        // Mock console.warn
+
+        await assetpack.run();
+
+        const sheet1 = readJSONSync(`${outputDir}/sprites.json`);
+
+        expect(sheet1.frames['empty2x2.png']).toEqual({
+            frame: {
+                x: 2,
+                y: 2,
+                w: 2,
+                h: 2
+            },
+            rotated: false,
+            trimmed: false,
+            spriteSourceSize: {
+                x: 0,
+                y: 0,
+                w: 2,
+                h: 2
+            },
+            sourceSize: {
+                w: 2,
+                h: 2
+            }
+        },
+        );
+    });
 });
+
