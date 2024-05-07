@@ -1,4 +1,5 @@
 import { readJSONSync } from 'fs-extra';
+import glob from 'glob-promise';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test/index';
 import { texturePacker } from '../src/texturePacker';
 import { texturePackerCacheBuster } from '../src/texturePackerCacheBuster';
@@ -77,29 +78,87 @@ describe('Texture Packer All', () =>
 
         await assetpack.run();
 
-        [
-            {
-                json: `sprites-dvKKlQ@0.5x.webp.json`,
-                image: `sprites-g_W8Sw@0.5x.webp`,
-            },
-            {
-                json: `sprites-RCqjNQ.webp.json`,
-                image: `sprites-wXEUjA.webp`,
-            },
-            {
-                json: `sprites-1Cv-Yg@0.5x.png.json`,
-                image: `sprites-TV3-Lg@0.5x.png`,
+        const globPath = `${outputDir}/*.{json,png,webp}`;
+        const files = await glob(globPath);
 
-            },
-            {
-                json: `sprites-FYLGeg.png.json`,
-                image: `sprites-Ef_oOA.png`,
-            }
-        ].forEach(({ json, image }) =>
+        // need two sets of files
+        expect(files.length).toBe(8);
+        expect(files.filter((file) => file.endsWith('.json')).length).toBe(4);
+        expect(files.filter((file) => file.endsWith('.png')).length).toBe(2);
+        expect(files.filter((file) => file.endsWith('.webp')).length).toBe(2);
+        expect(files.filter((file) => file.endsWith('.jpg')).length).toBe(0);
+
+        const jsonFiles = files.filter((file) => file.endsWith('.json'));
+        const pngFiles = files.filter((file) => file.endsWith('.png'));
+        const webpFiles = files.filter((file) => file.endsWith('.webp'));
+
+        // check that the files are correct
+        jsonFiles.forEach((jsonFile) =>
         {
-            const jsonData = readJSONSync(`${outputDir}/${json}`);
+            const rawJson = readJSONSync(jsonFile);
+            const isHalfSize = jsonFile.includes('@0.5x');
+            const isWebp = jsonFile.includes('.webp');
+            const isPng = jsonFile.includes('.png');
 
-            expect(jsonData.meta.image).toEqual(image);
+            const checkFiles = (fileList: string[], isHalfSize: boolean, isFileType: boolean) =>
+            {
+                fileList.forEach((file) =>
+                {
+                    // remove the outputDir
+                    file = file.replace(`${outputDir}/`, '');
+                    const isFileHalfSize = file.includes('@0.5x');
+                    const isFileFileType = file.includes(isWebp ? '.webp' : '.png');
+                    const shouldExist = isHalfSize === isFileHalfSize && isFileType === isFileFileType;
+
+                    shouldExist ? expect(rawJson.meta.image).toEqual(file) : expect(rawJson.meta.image).not.toEqual(file);
+                });
+            };
+
+            if (isHalfSize)
+            {
+                if (isWebp)
+                {
+                    checkFiles(webpFiles, true, true);
+                }
+                else if (isPng)
+                {
+                    checkFiles(pngFiles, true, true);
+                }
+            }
+            else
+                if (isWebp)
+                {
+                    checkFiles(webpFiles, false, true);
+                }
+                else if (isPng)
+                {
+                    checkFiles(pngFiles, false, true);
+                }
         });
+
+        // [
+        //     {
+        //         json: `sprites-dvKKlQ@0.5x.webp.json`,
+        //         image: `sprites-g_W8Sw@0.5x.webp`,
+        //     },
+        //     {
+        //         json: `sprites-RCqjNQ.webp.json`,
+        //         image: `sprites-wXEUjA.webp`,
+        //     },
+        //     {
+        //         json: `sprites-1Cv-Yg@0.5x.png.json`,
+        //         image: `sprites-TV3-Lg@0.5x.png`,
+
+        //     },
+        //     {
+        //         json: `sprites-FYLGeg.png.json`,
+        //         image: `sprites-Ef_oOA.png`,
+        //     }
+        // ].forEach(({ json, image }) =>
+        // {
+        //     const jsonData = readJSONSync(`${outputDir}/${json}`);
+
+        //     expect(jsonData.meta.image).toEqual(image);
+        // });
     });
 });
