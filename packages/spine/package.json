@@ -1,6 +1,6 @@
 {
   "name": "@play-co/assetpack-plugin-spine",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "",
   "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/cache-buster/#readme",
   "bugs": "https://github.com/pixijs/assetpack/issues",
@@ -32,9 +32,9 @@
     "fs-extra": "^11.1.0"
   },
   "devDependencies": {
-    "@play-co/assetpack-core": "1.4.3",
-    "@play-co/assetpack-plugin-image": "1.4.3",
-    "@play-co/assetpack-plugin-manifest": "1.4.3",
+    "@play-co/assetpack-core": "1.4.4",
+    "@play-co/assetpack-plugin-image": "1.4.4",
+    "@play-co/assetpack-plugin-manifest": "1.4.4",
     "glob": "^8.0.3",
     "glob-promise": "^6.0.0"
   },

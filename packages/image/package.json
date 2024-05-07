@@ -1,6 +1,6 @@
 {
   "name": "@play-co/assetpack-plugin-image",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "",
   "homepage": "https://github.com/pixijs/assetpack/tree/master/packages/image/#readme",
   "bugs": "https://github.com/pixijs/assetpack/issues",
@@ -33,7 +33,7 @@
     "sharp": "^0.33.3"
   },
   "devDependencies": {
-    "@play-co/assetpack-core": "1.4.3"
+    "@play-co/assetpack-core": "1.4.4"
   },
   "peerDependencies": {
     "@play-co/assetpack-core": ">=0.0.0"
