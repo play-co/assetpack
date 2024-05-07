@@ -135,30 +135,5 @@ describe('Texture Packer All', () =>
                     checkFiles(pngFiles, false, true);
                 }
         });
-
-        // [
-        //     {
-        //         json: `sprites-dvKKlQ@0.5x.webp.json`,
-        //         image: `sprites-g_W8Sw@0.5x.webp`,
-        //     },
-        //     {
-        //         json: `sprites-RCqjNQ.webp.json`,
-        //         image: `sprites-wXEUjA.webp`,
-        //     },
-        //     {
-        //         json: `sprites-1Cv-Yg@0.5x.png.json`,
-        //         image: `sprites-TV3-Lg@0.5x.png`,
-
-        //     },
-        //     {
-        //         json: `sprites-FYLGeg.png.json`,
-        //         image: `sprites-Ef_oOA.png`,
-        //     }
-        // ].forEach(({ json, image }) =>
-        // {
-        //     const jsonData = readJSONSync(`${outputDir}/${json}`);
-
-        //     expect(jsonData.meta.image).toEqual(image);
-        // });
     });
 });

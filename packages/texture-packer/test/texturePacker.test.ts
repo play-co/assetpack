@@ -503,15 +503,15 @@ describe('Texture Packer', () =>
                 x: 2,
                 y: 2,
                 w: 1,
-                h: 1
+                h: 35
             },
             rotated: false,
-            trimmed: true,
+            trimmed: false,
             spriteSourceSize: {
                 x: 0,
                 y: 0,
                 w: 1,
-                h: 1
+                h: 35
             },
             sourceSize: {
                 w: 1,
@@ -583,7 +583,7 @@ describe('Texture Packer', () =>
         mockWarn.mockRestore();
     });
 
-    it.only('should handle smaller than 3x3 textures if trimming is enabled', async () =>
+    it('should handle smaller than 3x3 textures if trimming is enabled', async () =>
     {
         const testName = 'tp-small-trim';
         const inputDir = getInputDir(pkg, testName);
