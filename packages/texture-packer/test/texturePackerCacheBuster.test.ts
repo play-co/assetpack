@@ -1,4 +1,5 @@
 import { readJSONSync } from 'fs-extra';
+import glob from 'glob-promise';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test/index';
 import { texturePacker } from '../src/texturePacker';
 import { texturePackerCacheBuster } from '../src/texturePackerCacheBuster';
@@ -62,8 +63,34 @@ describe('Texture Packer Cache Buster', () =>
 
         await assetpack.run();
 
-        const sheet1 = readJSONSync(`${outputDir}/sprites-y1nb-g.json`);
+        const globPath = `${outputDir}/*.{json,png}`;
+        const files = await glob(globPath);
+        // need two sets of files
 
-        expect(sheet1.meta.image).toEqual('sprites-mG8rgA.png');
+        expect(files.length).toBe(2);
+        expect(files.filter((file) => file.endsWith('.json')).length).toBe(1);
+        expect(files.filter((file) => file.endsWith('.png')).length).toBe(1);
+
+        const jsonFiles = files.filter((file) => file.endsWith('.json'));
+        const pngFiles = files.filter((file) => file.endsWith('.png'));
+
+        // check that the files are correct
+        jsonFiles.forEach((jsonFile) =>
+        {
+            const rawJson = readJSONSync(jsonFile);
+
+            const checkFiles = (fileList: string[]) =>
+            {
+                fileList.forEach((file) =>
+                {
+                    // remove the outputDir
+                    file = file.replace(`${outputDir}/`, '');
+
+                    expect(rawJson.meta.image).toEqual(file);
+                });
+            };
+
+            checkFiles(pngFiles);
+        });
     });
 });

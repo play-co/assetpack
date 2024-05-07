@@ -1,4 +1,5 @@
 import { readFileSync } from 'fs-extra';
+import glob from 'glob-promise';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { spineAtlasCacheBuster } from '../src/spineAtlasCacheBuster';
 import { AssetPack } from '@play-co/assetpack-core';
@@ -47,9 +48,34 @@ describe('Spine Atlas Cache Buster', () =>
 
         await assetpack.run();
 
-        const rawAtlas = readFileSync(`${outputDir}/dragon-qmTByg.atlas`);
+        const globPath = `${outputDir}/*.{atlas,png}`;
+        const files = await glob(globPath);
 
-        expect(rawAtlas.includes('dragon-iSqGPQ')).toBeTruthy();
-        expect(rawAtlas.includes('dragon2-6ebkeA')).toBeTruthy();
+        // need two sets of files
+        expect(files.length).toBe(3);
+        expect(files.filter((file) => file.endsWith('.atlas')).length).toBe(1);
+        expect(files.filter((file) => file.endsWith('.png')).length).toBe(2);
+
+        const atlasFiles = files.filter((file) => file.endsWith('.atlas'));
+        const pngFiles = files.filter((file) => file.endsWith('.png'));
+
+        // check that the files are correct
+        atlasFiles.forEach((atlasFile) =>
+        {
+            const rawAtlas = readFileSync(atlasFile);
+
+            const checkFiles = (fileList: string[]) =>
+            {
+                fileList.forEach((file) =>
+                {
+                    // remove the outputDir
+                    file = file.replace(`${outputDir}/`, '');
+
+                    expect(rawAtlas.includes(file)).toBe(true);
+                });
+            };
+
+            checkFiles(pngFiles);
+        });
     });
 });

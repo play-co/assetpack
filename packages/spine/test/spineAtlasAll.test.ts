@@ -1,4 +1,5 @@
-import { existsSync, readFileSync } from 'fs-extra';
+import { readFileSync } from 'fs-extra';
+import glob from 'glob-promise';
 import { assetPath, createFolder, getInputDir, getOutputDir } from '../../../shared/test';
 import { spineAtlasCacheBuster } from '../src/spineAtlasCacheBuster';
 import { spineAtlasCompress } from '../src/spineAtlasCompress';
@@ -128,37 +129,62 @@ describe('Spine Atlas All', () =>
         });
 
         await assetpack.run();
+        const globPath = `${outputDir}/*.{atlas,png,webp}`;
+        const files = await glob(globPath);
 
-        [
-            {
-                atlas: `dragon-ZmGiUA@0.5x.webp.atlas`,
-                png1: `dragon-7mmX8g@0.5x.webp`,
-                png2: `dragon2-k_22pw@0.5x.webp`
-            },
-            {
-                atlas: `dragon-spj8.webp.atlas`,
-                png1: `dragon-rSwKOg.webp`,
-                png2: `dragon2-ws3uhw.webp`
-            },
-            {
-                atlas: `dragon-wstH@0.5x.png.atlas`,
-                png1: `dragon-3--s@0.5x.png`,
-                png2: `dragon2-vflfww@0.5x.png`
-            },
-            {
-                atlas: `dragon-O471eg.png.atlas`,
-                png1: `dragon-vezElA.png`,
-                png2: `dragon2-3UnJNw.png`
-            }
-        ].forEach(({ atlas, png1, png2 }) =>
+        // need two sets of files
+        expect(files.length).toBe(12);
+        expect(files.filter((file) => file.endsWith('.atlas')).length).toBe(4);
+        expect(files.filter((file) => file.endsWith('.png')).length).toBe(4);
+        expect(files.filter((file) => file.endsWith('.webp')).length).toBe(4);
+        expect(files.filter((file) => file.endsWith('.jpg')).length).toBe(0);
+
+        const atlasFiles = files.filter((file) => file.endsWith('.atlas'));
+        const pngFiles = files.filter((file) => file.endsWith('.png'));
+        const webpFiles = files.filter((file) => file.endsWith('.webp'));
+
+        // check that the files are correct
+        atlasFiles.forEach((atlasFile) =>
         {
-            const rawAtlas = readFileSync(`${outputDir}/${atlas}`);
+            const rawAtlas = readFileSync(atlasFile);
+            const isHalfSize = atlasFile.includes('@0.5x');
+            const isWebp = atlasFile.includes('.webp');
+            const isPng = atlasFile.includes('.png');
 
-            expect(rawAtlas.includes(png1)).toBeTruthy();
-            expect(rawAtlas.includes(png2)).toBeTruthy();
+            const checkFiles = (fileList: string[], isHalfSize: boolean, isFileType: boolean) =>
+            {
+                fileList.forEach((file) =>
+                {
+                    // remove the outputDir
+                    file = file.replace(`${outputDir}/`, '');
+                    const isFileHalfSize = file.includes('@0.5x');
+                    const isFileFileType = file.includes(isWebp ? '.webp' : '.png');
+                    const shouldExist = isHalfSize === isFileHalfSize && isFileType === isFileFileType;
 
-            expect(existsSync(`${outputDir}/${png1}`)).toBeTruthy();
-            expect(existsSync(`${outputDir}/${png2}`)).toBeTruthy();
+                    expect(rawAtlas.includes(file)).toBe(shouldExist);
+                });
+            };
+
+            if (isHalfSize)
+            {
+                if (isWebp)
+                {
+                    checkFiles(webpFiles, true, true);
+                }
+                else if (isPng)
+                {
+                    checkFiles(pngFiles, true, true);
+                }
+            }
+            else
+                if (isWebp)
+                {
+                    checkFiles(webpFiles, false, true);
+                }
+                else if (isPng)
+                {
+                    checkFiles(pngFiles, false, true);
+                }
         });
     });
 });

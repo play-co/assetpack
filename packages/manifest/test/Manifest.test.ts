@@ -631,11 +631,11 @@ describe('Manifest', () =>
                     ],
                 },
                 {
-                    alias: ['folder2/1.mp3', '1.mp3'],
+                    alias: ['folder2/1.mp3'],
                     src: ['folder2/1.ogg', 'folder2/1.mp3'],
                 },
                 {
-                    alias: ['folder2/folder3/1.mp3', '1.mp3'],
+                    alias: ['folder2/folder3/1.mp3'],
                     src: ['folder2/folder3/1.ogg', 'folder2/folder3/1.mp3'],
                 },
                 {
@@ -761,8 +761,7 @@ describe('Manifest', () =>
             assets: [
                 {
                     alias: [
-                        'folder/json.json',
-                        'folder/json'
+                        'folder/json.json'
                     ],
                     src: [
                         'folder/json.json'
@@ -770,8 +769,7 @@ describe('Manifest', () =>
                 },
                 {
                     alias: [
-                        'folder/json.json5',
-                        'folder/json'
+                        'folder/json.json5'
                     ],
                     src: [
                         'folder/json.json5'
@@ -811,8 +809,7 @@ describe('Manifest', () =>
                 },
                 {
                     alias: [
-                        'spine/dragon.json',
-                        'spine/dragon'
+                        'spine/dragon.json'
                     ],
                     src: [
                         'spine/dragon.json'
@@ -820,8 +817,7 @@ describe('Manifest', () =>
                 },
                 {
                     alias: [
-                        'spine/dragon.atlas',
-                        'spine/dragon'
+                        'spine/dragon.atlas'
                     ],
                     src: [
                         'spine/dragon@0.5x.atlas',

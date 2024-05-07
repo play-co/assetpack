@@ -34,7 +34,9 @@
   "devDependencies": {
     "@play-co/assetpack-core": "1.4.3",
     "@play-co/assetpack-plugin-image": "1.4.3",
-    "@play-co/assetpack-plugin-manifest": "1.4.3"
+    "@play-co/assetpack-plugin-manifest": "1.4.3",
+    "glob": "^8.0.3",
+    "glob-promise": "^6.0.0"
   },
   "peerDependencies": {
     "@play-co/assetpack-core": ">=0.0.0",
