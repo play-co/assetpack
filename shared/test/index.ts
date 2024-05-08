@@ -1,8 +1,8 @@
 import fs from 'fs-extra';
 import path from 'path';
-import { getRoot } from './find';
+import { vi } from 'vitest';
 
-import type { AssetPipe } from '@play-co/assetpack-core';
+import type { AssetPipe } from '../../src/core/index.js';
 
 export interface Folder
 {
@@ -19,12 +19,17 @@ export interface File
 
 export function getOutputDir(pkg: string, test: string)
 {
-    return path.join(path.join(getRoot(), `packages/${pkg}`), '.testOutput', test);
+    return path.join(path.join(process.cwd(), `test/${pkg}`), '.testOutput', test);
 }
 
 export function getInputDir(pkg: string, test: string)
 {
-    return path.join(path.join(getRoot(), `packages/${pkg}`), '.testInput', test);
+    return path.join(path.join(process.cwd(), `test/${pkg}`), '.testInput', test);
+}
+
+export function getCacheDir(pkg: string, test: string)
+{
+    return path.join(process.cwd(), `test/cache/${pkg}`, `.${test}-cache`);
 }
 
 export function createFolder(pkg: string, folder: Folder, base?: string)
@@ -56,9 +61,9 @@ export function createFolder(pkg: string, folder: Folder, base?: string)
     });
 }
 
-export function assetPath(pkg: string, pth: string): string
+export function assetPath(pth: string): string
 {
-    return path.join(path.join(getRoot(), `packages/${pkg}`), 'test/resources', pth);
+    return path.join(process.cwd(), 'test/resources', pth);
 }
 
 export function createAssetPipe(
@@ -71,12 +76,12 @@ export function createAssetPipe(
         const d = data[key];
 
         if (d === undefined) return undefined;
-        if (typeof d === 'function') return jest.fn(d);
+        if (typeof d === 'function') return vi.fn(d);
 
-        if (key === 'test') return jest.fn(() => true);
-        if (key === 'transform') return jest.fn((a) => [a]);
+        if (key === 'test') return vi.fn(() => true);
+        if (key === 'transform') return vi.fn((a) => [a]);
 
-        return jest.fn(async () => { /**/ });
+        return vi.fn(async () => { /**/ });
     };
 
     return {
