@@ -1,35 +1,18 @@
 {
+    "extends": "@pixi/extension-scripts/tsconfig",
+    "$schema": "https://json.schemastore.org/tsconfig",
     "compilerOptions": {
-        "allowSyntheticDefaultImports": true,
-        "esModuleInterop": true,
-        "lib": ["ESNext"],
-        "module": "commonjs",
-        "moduleResolution": "node",
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "pretty": true,
-        "sourceMap": true,
+        "lib": ["es2023"],
+        "module": "node16",
+        "target": "es2022",
+        "moduleDetection": "force",
         "strict": true,
-        "target": "ESNext",
-        "baseUrl": "./",
-        "paths": {
-            "@play-co/assetpack-core": [
-                "packages/core/src",
-            ],
-            "@play-co/assetpack-cli": [
-                "packages/cli/src",
-            ],
-            "@play-co/assetpack-plugin-*": [
-                "packages/*/src",
-            ]
-        },
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "moduleResolution": "node16",
+        "outDir": "dist",
+        "declaration": true,
+        "allowSyntheticDefaultImports": true
     },
-    "files": ["node_modules/jest-extended/types/index.d.ts"],
-    "exclude": ["dist", "node_modules"],
-    "ts-node": {
-        "files": true,
-        "compilerOptions": {
-            "esModuleInterop": true
-        },
-    }
-  }
+    "include": ["src", "global.d.ts"]
+}
