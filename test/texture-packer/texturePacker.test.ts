@@ -582,7 +582,7 @@ describe('Texture Packer', () =>
         // Check if console.warn was called
         expect(mockWarn).toHaveBeenCalled();
         // eslint-disable-next-line max-len
-        expect(mockWarn).toHaveBeenCalledWith(`[Assetpack][texturePacker] Texture Packer Shortcut clash detected for between sprite9.png, sprite8.png, sprite7.png, sprite6.png, sprite5.png, sprite4.png, sprite3.png, sprite2.png, sprite1.png, sprite0.png. This means that 'nameStyle' is set to 'short' and different sprite sheets have frames that share the same name. Please either rename the files or set 'nameStyle' in the texture packer options to 'relative'`); // Adjust this line based on expected message
+        expect(mockWarn).toHaveBeenCalledWith(`[AssetPack][texturePacker] Texture Packer Shortcut clash detected for between sprite9.png, sprite8.png, sprite7.png, sprite6.png, sprite5.png, sprite4.png, sprite3.png, sprite2.png, sprite1.png, sprite0.png. This means that 'nameStyle' is set to 'short' and different sprite sheets have frames that share the same name. Please either rename the files or set 'nameStyle' in the texture packer options to 'relative'`); // Adjust this line based on expected message
 
         // Restore console.warn
         mockWarn.mockRestore();

@@ -23,7 +23,7 @@ export async function createTextureData(options: Required<PackTexturesOptions>)
 
         if (!metaData.width || !metaData.height)
         {
-            throw new Error(`[Assetpack][packTextures] Could not get metadata for ${texture.path}`);
+            throw new Error(`[AssetPack][packTextures] Could not get metadata for ${texture.path}`);
         }
 
         const newWidth = Math.ceil(metaData.width * scale);
@@ -57,7 +57,7 @@ export async function createTextureData(options: Required<PackTexturesOptions>)
         let result = await sharpImage.toBuffer({ resolveWithObject: true }).catch((error) =>
         {
             // eslint-disable-next-line max-len
-            Logger.warn(`[Assetpack][packTextures] Failed to process texture: ${texture.path} - ${error}, using empty pixel texture instead.`);
+            Logger.warn(`[AssetPack][packTextures] Failed to process texture: ${texture.path} - ${error}, using empty pixel texture instead.`);
 
             return { data: null, info: null };
         });

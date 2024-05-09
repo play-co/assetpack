@@ -112,7 +112,7 @@ export function compress(options: CompressOptions = {}): AssetPipe<CompressOptio
             }
             catch (error)
             {
-                throw new Error(`[AssetPack] Failed to compress image: ${asset.path} - ${error}`);
+                throw new Error(`[AssetPack][compress] Failed to compress image: ${asset.path} - ${error}`);
             }
         },
 

@@ -85,7 +85,7 @@ export function mipmap(_options: MipmapOptions = {}): AssetPipe<MipmapOptions>
             }
             catch (error)
             {
-                throw new Error(`[AssetPack] Failed to mipmap image: ${asset.path} - ${error}`);
+                throw new Error(`[AssetPack][mipmap] Failed to mipmap image: ${asset.path} - ${error}`);
             }
 
             // now create our new assets

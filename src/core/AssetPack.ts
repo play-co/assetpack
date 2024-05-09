@@ -45,13 +45,9 @@ export class AssetPack
 
         const { pipes, cache, cacheLocation } = this.config;
 
-        // make a hash..
-        const cacheName = generateCacheName(this.config);
-
+        AssetCache.location = cacheLocation!;
         let assetCacheData = null;
         let assetCache: AssetCache | null = null;
-
-        AssetCache.location = cacheLocation!;
 
         // if there is no cache, lets just go ahead and remove the output folder
         // and the cached info folder
@@ -65,7 +61,7 @@ export class AssetPack
             // create the asset cache, this is used to store the asset graph information
             // so if you restart the process, it can pick up where it left off
             assetCache = new AssetCache({
-                cacheName,
+                cacheName: generateCacheName(this.config),
             });
 
             // read the cache data, this will be used to restore the asset graph
@@ -74,11 +70,11 @@ export class AssetPack
 
             if (assetCacheData)
             {
-                Logger.info('cache found.');
+                Logger.info('[AssetPack] cache found.');
             }
             else
             {
-                Logger.warn('cache not found, clearing output folder');
+                Logger.warn('[AssetPack] cache not found, clearing output folder');
 
                 // to be safe - lets nuke the folder as the cache is empty
                 fs.removeSync(this._outputPath);

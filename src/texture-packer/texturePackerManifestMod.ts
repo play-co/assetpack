@@ -1,5 +1,5 @@
 import fs from 'fs-extra';
-import { findAssets, path } from '../core/index.js';
+import { findAssets, Logger, path } from '../core/index.js';
 
 import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
 
@@ -56,7 +56,7 @@ export function texturePackerManifestMod(
             if (!fs.existsSync(newFileName))
             {
                 // eslint-disable-next-line max-len
-                console.warn(`[Assetpack] Texture Packer Manifest could not find the manifest: ${newFileName}. Please ensure that the 'pixiManifest' output and the 'texturePackerManifest' output are the same.`);
+                Logger.warn(`[AssetPack][texture-packer-manifest] Texture Packer Manifest could not find the manifest: ${newFileName}. Please ensure that the 'pixiManifest' output and the 'texturePackerManifest' output are the same.`);
 
                 return;
             }

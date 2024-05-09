@@ -43,7 +43,7 @@ function checkForTexturePackerShortcutClashes(
     if (clashes.length > 0)
     {
         // eslint-disable-next-line max-len
-        Logger.warn(`[Assetpack][texturePacker] Texture Packer Shortcut clash detected for between ${clashes.join(', ')}. This means that 'nameStyle' is set to 'short' and different sprite sheets have frames that share the same name. Please either rename the files or set 'nameStyle' in the texture packer options to 'relative'`);
+        Logger.warn(`[AssetPack][texturePacker] Texture Packer Shortcut clash detected for between ${clashes.join(', ')}. This means that 'nameStyle' is set to 'short' and different sprite sheets have frames that share the same name. Please either rename the files or set 'nameStyle' in the texture packer options to 'relative'`);
     }
 }
 
@@ -74,7 +74,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
 
     return {
         folder: true,
-        name: 'texture-packer-pixi',
+        name: 'texture-packer',
         defaultOptions,
         test(asset: Asset, options)
         {
