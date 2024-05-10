@@ -238,11 +238,11 @@ function _deleteAsset(asset: Asset)
 
 function normalizePath(pth: string)
 {
-    pth = path.normalizeSafe(pth);
+    pth = path.normalizeTrim(pth);
 
     if (!path.isAbsolute(pth))
     {
-        pth = path.normalizeSafe(path.join(process.cwd(), pth));
+        pth = path.normalizeTrim(path.join(process.cwd(), pth));
     }
 
     return pth;
