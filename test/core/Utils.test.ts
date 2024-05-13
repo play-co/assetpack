@@ -16,6 +16,21 @@ describe('Utils', () =>
         expect(true).toBe(true);
     });
 
+    it('should normalise the path correctly', () =>
+    {
+        expect(
+            new AssetPack({
+                entry: 'test/test/test',
+            })['_entryPath'].endsWith('test/test/test'),
+        ).toBe(true);
+
+        expect(
+            new AssetPack({
+                entry: 'test/test/test/',
+            })['_entryPath'].endsWith('test/test/test'),
+        ).toBe(true);
+    });
+
     it('should extract tags from file name', async () =>
     {
         expect(extractTagsFromFileName('test')).toEqual({});
