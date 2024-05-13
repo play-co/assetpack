@@ -130,6 +130,9 @@ export class AssetPack
                     // write back to the cache...
                     await (assetCache as AssetCache).write(root);
 
+                    // release the buffers from the cache
+                    root.releaseChildrenBuffers();
+
                     Logger.info('cache updated.');
                 }
             }

@@ -93,7 +93,7 @@ describe('Core', () =>
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
             output: outputDir,
-            cache: false,
+            cache: true,
         });
 
         await assetpack.watch();
@@ -109,6 +109,7 @@ describe('Core', () =>
 
         expect(existsSync(join(outputDir, 'new-json-file.json'))).toBe(true);
         expect(existsSync(join(outputDir, 'json.json'))).toBe(true);
+        fs.writeJSONSync(join(inputDir, 'json.json'), { nice: 'test' });
 
         fs.removeSync(testFile);
 
@@ -121,6 +122,7 @@ describe('Core', () =>
 
         expect(existsSync(join(outputDir, 'new-json-file.json'))).toBe(false);
         expect(existsSync(join(outputDir, 'json.json'))).toBe(true);
+        expect(fs.readJSONSync(join(outputDir, 'json.json'))).toStrictEqual({ nice: 'test' });
     });
 
     it('should ignore specified files when watching', async () =>
