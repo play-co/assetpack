@@ -72,7 +72,7 @@ describe('Core', () =>
     it('should watch for changes', async () =>
     {
         const testName = 'watch-delete';
-        const inputDir = getInputDir(pkg, testName);
+        const inputDir = `${getInputDir(pkg, testName)}/`;
         const outputDir = getOutputDir(pkg, testName);
 
         fs.removeSync(inputDir);

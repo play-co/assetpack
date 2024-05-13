@@ -302,7 +302,7 @@ export class AssetWatcher
     {
         const parentPath = path.dirname(dirPath);
 
-        if (parentPath === this._entryPath || parentPath === '.')
+        if (parentPath === this._entryPath || parentPath === '.' || parentPath === '/')
         {
             return;
         }
