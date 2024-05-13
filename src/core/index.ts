@@ -9,6 +9,7 @@ export * from './pipes/PipeSystem.js';
 export * from './utils/checkExt.js';
 export * from './utils/createNewAssetAt.js';
 export * from './utils/findAssets.js';
+export * from './utils/getHash.js';
 export * from './utils/merge.js';
 export * from './utils/path.js';
 export * from './utils/stripTags.js';
