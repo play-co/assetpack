@@ -32,6 +32,10 @@
       "import": "./dist/manifest/index.js",
       "types": "./dist/manifest/index.d.ts"
     },
+    "./pixi": {
+      "import": "./dist/pixi/index.js",
+      "types": "./dist/pixi/index.d.ts"
+    },
     "./spine": {
       "import": "./dist/spine/index.js",
       "types": "./dist/spine/index.d.ts"
