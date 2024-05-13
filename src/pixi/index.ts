@@ -35,7 +35,7 @@ export interface PixiAssetPack
 
 const resolutions = { default: 1, low: 0.5 };
 
-/** the default config parts used by the compiler */
+/** the default config parts used by the Pixi pipes */
 const defaultConfig: PixiAssetPack = {
     cacheBust: true,
     resolutions,
