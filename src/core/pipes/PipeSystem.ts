@@ -77,7 +77,7 @@ export class PipeSystem
 
         const options = mergePipeOptions(pipe, asset);
 
-        if (pipe.transform && pipe.test && pipe.test(asset, options))
+        if (options !== false && pipe.transform && pipe.test?.(asset, options))
         {
             asset.transformName = pipe.name;
             asset.transformChildren = [];

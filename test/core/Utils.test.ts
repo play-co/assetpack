@@ -48,16 +48,16 @@ describe('Utils', () =>
             });
 
         let counter = 0;
+        let assetTemp;
+        let optionsTemp;
         const plugin = createAssetPipe({
             folder: true,
-            test: ((asset: Asset, _options: any) =>
+            test: ((asset: Asset, options: any) =>
             {
                 counter++;
                 if (counter === 1) return false;
-
-                expect(asset.allMetaData).toEqual({
-                    override: [1, 2]
-                });
+                assetTemp = asset;
+                optionsTemp = options;
 
                 return true;
             }) as any,
@@ -76,6 +76,13 @@ describe('Utils', () =>
             assetSettings: [
                 {
                     files: ['**'],
+                    settings: {
+                        test: {
+                            tags: {
+                                test: 'override',
+                            }
+                        }
+                    },
                     metaData: {
                         override: [1, 2]
                     },
@@ -84,6 +91,72 @@ describe('Utils', () =>
         });
 
         await assetpack.run();
+
+        expect(optionsTemp).toEqual({
+            tags: {
+                test: 'override',
+            }
+        });
+        expect(assetTemp!.allMetaData).toEqual({
+            override: [1, 2]
+        });
+    });
+
+    it('should allow for plugin to be turned off', async () =>
+    {
+        const testName = 'plugin-off';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        createFolder(
+            pkg,
+            {
+                name: testName,
+                files: [],
+                folders: [
+                    {
+                        name: 'anything',
+                        files: [],
+                        folders: [],
+                    },
+                ],
+            });
+
+        let counter = 0;
+        const plugin = createAssetPipe({
+            folder: true,
+            test: (() =>
+            {
+                counter++;
+
+                return true;
+            }) as any,
+            start: true,
+            finish: true,
+            transform: true,
+        }) as AssetPipe<any>;
+
+        const assetpack = new AssetPack({
+            entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
+            output: outputDir,
+            pipes: [
+                plugin// as Plugin<any>
+            ],
+            cache: false,
+            assetSettings: [
+                {
+                    files: ['**'],
+                    settings: {
+                        test: false
+                    }
+                },
+            ]
+        });
+
+        await assetpack.run();
+
+        // it equals 1 because the first time it is called it is called on the input path, not the asset
+        expect(counter).toEqual(1);
     });
 
     it('should create a unique cache name', async () =>
