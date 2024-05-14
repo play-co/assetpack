@@ -28,7 +28,7 @@ export function multiPipe(options: MultiPipeOptions): AssetPipe<MultiPipeOptions
 
                 const options = mergePipeOptions(pipe, asset);
 
-                if (pipe.transform && pipe.test && pipe.test(asset, options))
+                if (options !== false && pipe.transform && pipe.test?.(asset, options))
                 {
                     return true;
                 }
@@ -46,7 +46,7 @@ export function multiPipe(options: MultiPipeOptions): AssetPipe<MultiPipeOptions
 
                 const options = mergePipeOptions(pipe, asset);
 
-                if (pipe.transform && pipe.test && pipe.test(asset, options))
+                if (options !== false && pipe.transform && pipe.test?.(asset, options))
                 {
                     promises.push(pipe.transform(asset, options, pipeSystem));
                 }
