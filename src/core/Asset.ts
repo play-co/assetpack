@@ -237,5 +237,17 @@ export class Asset
             this.transformChildren[i].releaseBuffers();
         }
     }
+
+    /**
+     * Release all buffers from this asset and its children
+     */
+    releaseChildrenBuffers()
+    {
+        this.releaseBuffers();
+        for (let i = 0; i < this.children.length; i++)
+        {
+            this.children[i].releaseChildrenBuffers();
+        }
+    }
 }
 

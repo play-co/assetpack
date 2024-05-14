@@ -59,9 +59,6 @@ export class PipeSystem
     async transform(asset: Asset): Promise<void>
     {
         await this._transform(asset, 0);
-
-        // clean up any buffers still held for gc!
-        asset.releaseBuffers();
     }
 
     private async _transform(asset: Asset, pipeIndex = 0): Promise<void>

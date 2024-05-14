@@ -4,50 +4,17 @@
   "license": "MIT",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./dist/core/index.js",
-      "types": "./dist/core/index.d.ts"
-    },
-    "./cache-buster": {
-      "import": "./dist/cache-buster/index.js",
-      "types": "./dist/cache-buster/index.d.ts"
-    },
-    "./cli": {
-      "import": "./dist/cli/index.js",
-      "types": "./dist/cli/index.d.ts"
-    },
-    "./ffmpeg": {
-      "import": "./dist/ffmpeg/index.js",
-      "types": "./dist/ffmpeg/index.d.ts"
-    },
-    "./image": {
-      "import": "./dist/image/index.js",
-      "types": "./dist/image/index.d.ts"
-    },
-    "./json": {
-      "import": "./dist/json/index.js",
-      "types": "./dist/json/index.d.ts"
-    },
-    "./manifest": {
-      "import": "./dist/manifest/index.js",
-      "types": "./dist/manifest/index.d.ts"
-    },
-    "./pixi": {
-      "import": "./dist/pixi/index.js",
-      "types": "./dist/pixi/index.d.ts"
-    },
-    "./spine": {
-      "import": "./dist/spine/index.js",
-      "types": "./dist/spine/index.d.ts"
-    },
-    "./texture-packer": {
-      "import": "./dist/texture-packer/index.js",
-      "types": "./dist/texture-packer/index.d.ts"
-    },
-    "./webfont": {
-      "import": "./dist/webfont/index.js",
-      "types": "./dist/webfont/index.d.ts"
-    }
+    ".": "./dist/core/index.js",
+    "./cache-buster": "./dist/cache-buster/index.js",
+    "./cli": "./dist/cli/index.js",
+    "./ffmpeg": "./dist/ffmpeg/index.js",
+    "./image": "./dist/image/index.js",
+    "./json": "./dist/json/index.js",
+    "./manifest": "./dist/manifest/index.js",
+    "./pixi": "./dist/pixi/index.js",
+    "./spine": "./dist/spine/index.js",
+    "./texture-packer": "./dist/texture-packer/index.js",
+    "./webfont": "./dist/webfont/index.js"
   },
   "main": "dist/core/index.js",
   "module": "dist/core/index.js",
