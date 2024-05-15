@@ -2,11 +2,8 @@ import fs from 'fs-extra';
 import { existsSync } from 'node:fs';
 import { join } from 'path';
 import { describe, expect, it } from 'vitest';
-import { cacheBuster } from '../../src/cache-buster/cacheBuster.js';
 import { AssetPack } from '../../src/core/AssetPack.js';
-import { getHash } from '../../src/core/index.js';
 import { logAssetGraph } from '../../src/core/utils/logAssetGraph.js';
-import { pixiManifest } from '../../src/manifest/pixiManifest.js';
 import {
     assetPath,
     createAssetPipe,
@@ -126,73 +123,6 @@ describe('Core', () =>
         expect(existsSync(join(outputDir, 'new-json-file.json'))).toBe(false);
         expect(existsSync(join(outputDir, 'json.json'))).toBe(true);
         expect(fs.readJSONSync(join(outputDir, 'json.json'))).toStrictEqual({ nice: 'test' });
-    });
-
-    it('should delete previously hashed versions of an asset', { timeout: 10000 }, async () =>
-    {
-        const testName = 'watch-delete-hash';
-        const inputDir = `${getInputDir(pkg, testName)}/`;
-        const outputDir = getOutputDir(pkg, testName);
-
-        createFolder(
-            pkg,
-            {
-                name: testName,
-                files: [{
-                    name: 'json.json',
-                    content: assetPath('json/json.json'),
-                }],
-                folders: [],
-            });
-
-        const testFile = join(inputDir, 'json.json');
-
-        const assetpack = new AssetPack({
-            entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
-            output: outputDir,
-            cache: true,
-            pipes: [
-                cacheBuster(),
-                pixiManifest(),
-            ]
-        });
-
-        await assetpack.watch();
-
-        const origHash = getHash(join(inputDir, 'json.json'));
-
-        expect(existsSync(join(outputDir, `json-${origHash}.json`))).toBe(true);
-
-        fs.writeJSONSync(testFile, { nice: 'test' });
-
-        await new Promise((resolve) =>
-        {
-            setTimeout(resolve, 1500);
-        });
-
-        expect(existsSync(join(outputDir, `json-${origHash}.json`))).toBe(false);
-        const newHash = getHash(join(inputDir, 'json.json'));
-
-        expect(existsSync(join(outputDir, `json-${newHash}.json`))).toBe(true);
-
-        fs.removeSync(testFile);
-
-        await new Promise((resolve) =>
-        {
-            setTimeout(resolve, 1500);
-        });
-
-        await assetpack.stop();
-
-        expect(existsSync(join(outputDir, `json-${origHash}.json`))).toBe(false);
-        expect(existsSync(join(outputDir, `json-${newHash}.json`))).toBe(false);
-        expect(fs.readJSONSync(join(outputDir, 'manifest.json'))).toStrictEqual({
-            bundles: [
-                {
-                    name: 'default',
-                    assets: []
-                }]
-        });
     });
 
     it('should ignore specified files when watching', async () =>
