@@ -218,7 +218,7 @@ export class AssetPack
     }
 }
 
-async function deleteAsset(asset: Asset)
+export async function deleteAsset(asset: Asset)
 {
     asset.transformChildren.forEach((child) =>
     {

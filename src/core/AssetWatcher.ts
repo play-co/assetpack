@@ -2,6 +2,7 @@ import chokidar from 'chokidar';
 import fs from 'fs-extra';
 import { Asset } from './Asset.js';
 import { AssetIgnore } from './AssetIgnore.js';
+import { deleteAsset } from './AssetPack.js';
 import { Logger } from './logger/Logger.js';
 import { applySettingToAsset } from './utils/applySettingToAsset.js';
 import { path } from './utils/path.js';
@@ -222,6 +223,7 @@ export class AssetWatcher
             else if (asset.state === 'normal')
             {
                 asset.state = 'modified';
+                deleteAsset(asset);
             }
 
             // flag all folders as modified..
