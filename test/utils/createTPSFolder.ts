@@ -1,6 +1,6 @@
-import { assetPath, createFolder } from '.';
+import { assetPath, createFolder } from './index.js';
 
-import type { File } from '.';
+import type { File } from './index.js';
 
 export function createTPSFolder(testName: string, pkg: string): void
 {
