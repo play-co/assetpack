@@ -1,21 +1,21 @@
 import fs from 'fs-extra';
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import {
-    assetPath,
-    createFolder,
-    getCacheDir,
-    getInputDir,
-    getOutputDir
-} from '../../shared/test/index.js';
 import { AssetPack } from '../../src/core/index.js';
 import { audio } from '../../src/ffmpeg/index.js';
 import { compress, mipmap } from '../../src/image/index.js';
 import { pixiManifest } from '../../src/manifest/index.js';
 import { spineAtlasManifestMod, spineAtlasMipmap } from '../../src/spine/index.js';
 import { texturePacker, texturePackerManifestMod } from '../../src/texture-packer/index.js';
+import {
+    assetPath,
+    createFolder,
+    getCacheDir,
+    getInputDir,
+    getOutputDir
+} from '../utils/index.js';
 
-import type { File } from '../../shared/test/index.js';
+import type { File } from '../utils/index.js';
 
 const pkg = 'manifest';
 

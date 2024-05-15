@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
-import { createAssetPipe } from '../../shared/test/index.js';
 import { AssetPack } from '../../src/core/index.js';
+import { createAssetPipe } from '../utils/index.js';
 
 import type { AssetPackConfig } from '../../src/core/config.js';
 

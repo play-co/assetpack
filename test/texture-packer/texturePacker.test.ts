@@ -2,39 +2,14 @@ import fs from 'fs-extra';
 import { existsSync } from 'node:fs';
 import sharp from 'sharp';
 import { describe, expect, it, vi } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { AssetPack, Logger } from '../../src/core/index.js';
 import { texturePacker } from '../../src/texture-packer/texturePacker.js';
+import { createTPSFolder } from '../utils/createTPSFolder.js';
+import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
-import type { File } from '../../shared/test/index.js';
+import type { File } from '../utils/index.js';
 
 const pkg = 'texture-packer';
-
-function genFolder(testName: string)
-{
-    const sprites: File[] = [];
-
-    for (let i = 0; i < 10; i++)
-    {
-        sprites.push({
-            name: `sprite${i}.png`,
-            content: assetPath(`image/sp-${i + 1}.png`),
-        });
-    }
-    createFolder(
-        pkg,
-        {
-            name: testName,
-            files: [],
-            folders: [
-                {
-                    name: 'sprites{tps}',
-                    files: sprites,
-                    folders: [],
-                },
-            ],
-        });
-}
 
 describe('Texture Packer', () =>
 {
@@ -44,7 +19,7 @@ describe('Texture Packer', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
@@ -83,7 +58,7 @@ describe('Texture Packer', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const size = 512;
 
@@ -119,7 +94,7 @@ describe('Texture Packer', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
@@ -152,7 +127,7 @@ describe('Texture Packer', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
@@ -276,7 +251,7 @@ describe('Texture Packer', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),

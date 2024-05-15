@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { createAssetPipe, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { AssetPack } from '../../src/core/AssetPack.js';
 import { extractTagsFromFileName } from '../../src/core/utils/extractTagsFromFileName.js';
 import { generateCacheName } from '../../src/core/utils/generateCacheName.js';
+import { createAssetPipe, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 import type { Asset } from '../../src/core/Asset.js';
 import type { AssetPipe } from '../../src/core/index.js';

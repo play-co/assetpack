@@ -1,9 +1,9 @@
 import { existsSync } from 'node:fs';
 import { join } from 'upath';
 import { describe, expect, it } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { cacheBuster } from '../../src/cache-buster/index.js';
 import { Asset, AssetPack, path } from '../../src/core/index.js';
+import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 const pkg = 'cache-buster';
 

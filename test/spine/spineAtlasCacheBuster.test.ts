@@ -1,10 +1,10 @@
 import { glob } from 'glob';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { cacheBuster } from '../../src/cache-buster/index.js';
 import { AssetPack } from '../../src/core/index.js';
 import { spineAtlasCacheBuster } from '../../src/spine/spineAtlasCacheBuster.js';
+import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 const pkg = 'spine';
 

@@ -2,6 +2,8 @@ import fs from 'fs-extra';
 import { existsSync } from 'node:fs';
 import { join } from 'path';
 import { describe, expect, it } from 'vitest';
+import { AssetPack } from '../../src/core/AssetPack.js';
+import { logAssetGraph } from '../../src/core/utils/logAssetGraph.js';
 import {
     assetPath,
     createAssetPipe,
@@ -9,12 +11,10 @@ import {
     getCacheDir,
     getInputDir,
     getOutputDir
-} from '../../shared/test/index.js';
-import { AssetPack } from '../../src/core/AssetPack.js';
-import { logAssetGraph } from '../../src/core/utils/logAssetGraph.js';
+} from '../utils/index.js';
 
-import type { MockAssetPipe } from '../../shared/test/index.js';
 import type { AssetPipe } from '../../src/core/pipes/AssetPipe.js';
+import type { MockAssetPipe } from '../utils/index.js';
 
 const pkg = 'core';
 

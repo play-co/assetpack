@@ -1,10 +1,10 @@
 import fs from 'fs-extra';
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { AssetPack } from '../../src/core/index.js';
 import { pixiManifest } from '../../src/manifest/index.js';
 import { msdfFont, sdfFont, webfont } from '../../src/webfont/index.js';
+import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 const pkg = 'webfont';
 

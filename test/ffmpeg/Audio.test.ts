@@ -1,8 +1,8 @@
 import { existsSync } from 'node:fs';
 import { describe, expect, it, vi } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { AssetPack } from '../../src/core/index.js';
 import { audio } from '../../src/ffmpeg/index.js';
+import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 const pkg = 'ffmpeg';
 
