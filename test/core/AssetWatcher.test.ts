@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { assetPath, createFolder, getInputDir } from '../../shared/test/index.js';
 import { Asset } from '../../src/core/Asset.js';
 import { AssetCache } from '../../src/core/AssetCache.js';
 import { AssetWatcher } from '../../src/core/AssetWatcher.js';
 import { logAssetGraph } from '../../src/core/utils/logAssetGraph.js';
+import { assetPath, createFolder, getInputDir } from '../utils/index.js';
 
 const pkg = 'core';
 

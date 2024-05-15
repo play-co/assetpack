@@ -1,43 +1,16 @@
 import fs from 'fs-extra';
 import { glob } from 'glob';
 import { describe, expect, it } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { cacheBuster } from '../../src/cache-buster/index.js';
 import { AssetPack } from '../../src/core/index.js';
 import { compress, mipmap } from '../../src/image/index.js';
 import { texturePacker } from '../../src/texture-packer/texturePacker.js';
 import { texturePackerCacheBuster } from '../../src/texture-packer/texturePackerCacheBuster.js';
 import { texturePackerCompress } from '../../src/texture-packer/texturePackerCompress.js';
-
-import type { File } from '../../shared/test/index.js';
+import { createTPSFolder } from '../utils/createTPSFolder.js';
+import { getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 const pkg = 'texture-packer';
-
-function genFolder(testName: string)
-{
-    const sprites: File[] = [];
-
-    for (let i = 0; i < 10; i++)
-    {
-        sprites.push({
-            name: `sprite${i}.png`,
-            content: assetPath(`image/sp-${i + 1}.png`),
-        });
-    }
-    createFolder(
-        pkg,
-        {
-            name: testName,
-            files: [],
-            folders: [
-                {
-                    name: 'sprites{tps}',
-                    files: sprites,
-                    folders: [],
-                },
-            ],
-        });
-}
 
 describe('Texture Packer All', () =>
 {
@@ -47,7 +20,7 @@ describe('Texture Packer All', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),

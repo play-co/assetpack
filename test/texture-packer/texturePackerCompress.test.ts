@@ -1,39 +1,12 @@
 import fs from 'fs-extra';
 import { describe, expect, it } from 'vitest';
-import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../../shared/test/index.js';
 import { AssetPack } from '../../src/core/index.js';
 import { compress } from '../../src/image/index.js';
 import { texturePacker, texturePackerCompress } from '../../src/texture-packer/index.js';
-
-import type { File } from '../../shared/test/index.js';
+import { createTPSFolder } from '../utils/createTPSFolder.js';
+import { getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 const pkg = 'texture-packer';
-
-function genFolder(testName: string)
-{
-    const sprites: File[] = [];
-
-    for (let i = 0; i < 10; i++)
-    {
-        sprites.push({
-            name: `sprite${i}.png`,
-            content: assetPath(`image/sp-${i + 1}.png`),
-        });
-    }
-    createFolder(
-        pkg,
-        {
-            name: testName,
-            files: [],
-            folders: [
-                {
-                    name: 'sprites{tps}',
-                    files: sprites,
-                    folders: [],
-                },
-            ],
-        });
-}
 
 describe('Texture Packer Compression', () =>
 {
@@ -43,7 +16,7 @@ describe('Texture Packer Compression', () =>
         const inputDir = getInputDir(pkg, testName);
         const outputDir = getOutputDir(pkg, testName);
 
-        genFolder(testName);
+        createTPSFolder(testName, pkg);
 
         const compressOpt = {
             png: true,
