@@ -102,6 +102,8 @@ function collectAssets(
 )
 {
     if (asset.skip) return;
+    // an item may have been deleted, so we don't want to add it to the manifest!
+    if (asset.state === 'deleted') return;
 
     let localBundle = bundle;
 

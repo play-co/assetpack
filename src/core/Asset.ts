@@ -76,6 +76,8 @@ export class Asset
             this.children.splice(index, 1);
             asset.parent = null;
         }
+
+        asset.releaseChildrenBuffers();
     }
 
     addTransformChild(asset: Asset)

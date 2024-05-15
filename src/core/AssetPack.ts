@@ -203,7 +203,7 @@ export class AssetPack
         {
             if (asset.state === 'deleted')
             {
-                deleteAsset(asset);
+                deleteAssetFiles(asset);
             }
             else
             {
@@ -218,7 +218,7 @@ export class AssetPack
     }
 }
 
-async function deleteAsset(asset: Asset)
+export async function deleteAssetFiles(asset: Asset)
 {
     asset.transformChildren.forEach((child) =>
     {
