@@ -1,3 +1,4 @@
+import { finalCopyPipe } from './finalCopyPipe.js';
 import { mergePipeOptions } from './mergePipeOptions.js';
 import { multiPipe } from './multiPipe.js';
 
@@ -71,6 +72,15 @@ export class PipeSystem
         const pipe = this.pipes[pipeIndex]!;
 
         pipeIndex++;
+
+        // if the asset has the copy tag on it, then the only pipe that should be run is the final copy pipe
+        // this is to ensure that the asset is copied to the output directory without any other processing
+        if (asset.allMetaData.copy && pipe !== finalCopyPipe)
+        {
+            await this._transform(asset, pipeIndex);
+
+            return;
+        }
 
         const options = mergePipeOptions(pipe, asset);
 

@@ -241,6 +241,48 @@ describe('Core', () =>
         expect(existsSync(join(outputDir, 'scripts/test.json'))).toBe(false);
     });
 
+    it('should copy assets when copy tag is used', async () =>
+    {
+        const testName = 'copy-tag';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        createFolder(
+            pkg,
+            {
+                name: testName,
+                files: [],
+                folders: [{
+                    name: 'scripts{copy}',
+                    files: [{
+                        name: 'json.json',
+                        content: assetPath('json/json.json'),
+                    }],
+                    folders: [],
+                },
+                {
+                    name: 'scripts2',
+                    files: [{
+                        name: 'json{copy}.json',
+                        content: assetPath('json/json.json'),
+                    }],
+                    folders: [],
+                }],
+            });
+
+        const assetpack = new AssetPack({
+            entry: inputDir,
+            output: outputDir,
+            cache: false,
+            ignore: ['**/scripts/**/*'],
+        });
+
+        await assetpack.run();
+
+        expect(existsSync(join(outputDir, 'scripts/json.json'))).toBe(true);
+        expect(existsSync(join(outputDir, 'scripts2/json.json'))).toBe(true);
+    });
+
     it('should provide the correct options overrides to the plugin', async () =>
     {
         const testName = 'plugin-options-override';
