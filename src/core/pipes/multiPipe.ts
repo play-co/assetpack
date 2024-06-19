@@ -36,6 +36,20 @@ export function multiPipe(options: MultiPipeOptions): AssetPipe<MultiPipeOptions
 
             return false;
         },
+        async start(asset, _options, pipeSystem)
+        {
+            for (let i = 0; i < pipes.length; i++)
+            {
+                const pipe: AssetPipe = pipes[i] as AssetPipe;
+
+                const options = mergePipeOptions(pipe, asset);
+
+                if (options !== false && pipe.start && pipe.test?.(asset, options))
+                {
+                    pipe.start(asset, options, pipeSystem);
+                }
+            }
+        },
         async transform(asset: Asset, _options, pipeSystem: PipeSystem)
         {
             const promises: Promise<Asset[]>[] = [];
@@ -55,6 +69,20 @@ export function multiPipe(options: MultiPipeOptions): AssetPipe<MultiPipeOptions
             const allAssets = await Promise.all(promises);
 
             return allAssets.flat();
+        },
+        async finish(asset: Asset, _options, pipeSystem: PipeSystem)
+        {
+            for (let i = 0; i < pipes.length; i++)
+            {
+                const pipe: AssetPipe = pipes[i] as AssetPipe;
+
+                const options = mergePipeOptions(pipe, asset);
+
+                if (options !== false && pipe.finish && pipe.test?.(asset, options))
+                {
+                    await pipe.finish(asset, options, pipeSystem);
+                }
+            }
         }
     };
 }

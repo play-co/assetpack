@@ -35,7 +35,7 @@ export interface AssetPipe<OPTIONS=Record<string, any>>
      * @param asser - the root asset
      * @param processor - Processor that called the function.
      */
-    start?(asset: Asset, options: DeepRequired<OPTIONS>, pipeSystem: PipeSystem): void
+    start?(asset: Asset, options: DeepRequired<OPTIONS>, pipeSystem: PipeSystem): Promise<void>
 
     /**
      * Returns a boolean on whether or not the process should affect this tree.
@@ -56,6 +56,6 @@ export interface AssetPipe<OPTIONS=Record<string, any>>
      * @param asset - the root asset
      * @param processor - Processor that called the function.
      */
-    finish?(asset: Asset, options: DeepRequired<OPTIONS>, pipeSystem: PipeSystem): void
+    finish?(asset: Asset, options: DeepRequired<OPTIONS>, pipeSystem: PipeSystem): Promise<void>
 }
 
