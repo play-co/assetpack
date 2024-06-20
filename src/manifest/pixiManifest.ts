@@ -122,12 +122,13 @@ function collectAssets(
     }
 
     const bundleAssets = localBundle.assets;
-
     const finalAssets = asset.getFinalTransformedChildren();
 
     if (asset.transformChildren.length > 0 && !asset.inheritedMetaData[options.tags!.mIgnore!])
     {
         const nonIgnored = finalAssets.filter((finalAsset) => !finalAsset.inheritedMetaData[options.tags!.mIgnore!]);
+
+        if (nonIgnored.length === 0) return;
 
         bundleAssets.push({
             alias: getShortNames(stripTags(path.relative(entryPath, asset.path)), options),
