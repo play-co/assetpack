@@ -1,9 +1,9 @@
 import fs from 'fs-extra';
 import { describe, expect, it } from 'vitest';
 import { AssetPack } from '../../src/core/index.js';
+import { compress } from '../../src/image/compress.js';
 import { pixiManifest } from '../../src/manifest/index.js';
-import { texturePacker } from '../../src/texture-packer/index.js';
-import { texturePackerManifestMod } from '../../src/texture-packer/texturePackerManifestMod.js';
+import { texturePacker, texturePackerCompress } from '../../src/texture-packer/index.js';
 import { createTPSFolder } from '../utils/createTPSFolder.js';
 import { getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
@@ -30,7 +30,6 @@ describe('Texture Packer Compression', () =>
                     },
                 }),
                 pixiManifest(),
-                texturePackerManifestMod(),
             ]
         });
 
@@ -70,12 +69,13 @@ describe('Texture Packer Compression', () =>
             pipes: [
                 texturePacker({
                     resolutionOptions: {
-                        resolutions: { default: 1 },
-                        maximumTextureSize: 512
+                        resolutions: { default: 1, low: 0.5 },
+                        maximumTextureSize: 512,
                     },
                 }),
+                compress(),
+                texturePackerCompress(),
                 pixiManifest(),
-                texturePackerManifestMod(),
             ]
         });
 
@@ -86,10 +86,13 @@ describe('Texture Packer Compression', () =>
         expect(manifest.bundles[0].assets).toEqual([
             {
                 alias: [
-                    'sprites-0'
+                    'sprites'
                 ],
                 src: [
-                    'sprites-0.json'
+                    'sprites-0@0.5x.webp.json',
+                    'sprites-0@0.5x.png.json',
+                    'sprites-0.webp.json',
+                    'sprites-0.png.json',
                 ],
                 data: {
                     tags: {
@@ -97,19 +100,6 @@ describe('Texture Packer Compression', () =>
                     }
                 }
             },
-            {
-                alias: [
-                    'sprites-1'
-                ],
-                src: [
-                    'sprites-1.json'
-                ],
-                data: {
-                    tags: {
-                        tps: true
-                    }
-                }
-            }
         ]);
     });
 });

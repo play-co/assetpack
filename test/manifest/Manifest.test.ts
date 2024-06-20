@@ -6,7 +6,7 @@ import { audio } from '../../src/ffmpeg/index.js';
 import { compress, mipmap } from '../../src/image/index.js';
 import { pixiManifest } from '../../src/manifest/index.js';
 import { spineAtlasManifestMod, spineAtlasMipmap } from '../../src/spine/index.js';
-import { texturePacker, texturePackerManifestMod } from '../../src/texture-packer/index.js';
+import { texturePacker, texturePackerCompress } from '../../src/texture-packer/index.js';
 import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
 
 import type { File } from '../utils/index.js';
@@ -115,13 +115,13 @@ describe('Manifest', () =>
             output: outputDir,
             cache: useCache,
             pipes: [
+                audio(),
+                spineAtlasMipmap(),
                 texturePacker({
                     resolutionOptions: {
                         maximumTextureSize: 512,
                     },
                 }),
-                audio(),
-                spineAtlasMipmap(),
                 mipmap(),
                 compress({
                     png: true,
@@ -129,9 +129,9 @@ describe('Manifest', () =>
                     webp: true,
                     avif: false,
                 }),
+                texturePackerCompress(),
                 pixiManifest(),
                 spineAtlasManifestMod(),
-                texturePackerManifestMod(),
             ],
         });
 
@@ -176,18 +176,11 @@ describe('Manifest', () =>
                     },
                 },
                 {
-                    alias: ['bundle/tps-0'],
-                    src: ['bundle/tps-0@0.5x.json', 'bundle/tps-0.json'],
-                    data: {
-                        tags: {
-                            tps: true,
-                            m: true,
-                        },
-                    },
-                },
-                {
-                    alias: ['bundle/tps-1'],
-                    src: ['bundle/tps-1@0.5x.json', 'bundle/tps-1.json'],
+                    alias: ['bundle/tps'],
+                    src: ['bundle/tps-0@0.5x.webp.json',
+                        'bundle/tps-0@0.5x.png.json',
+                        'bundle/tps-0.webp.json',
+                        'bundle/tps-0.png.json'],
                     data: {
                         tags: {
                             tps: true,
@@ -232,7 +225,7 @@ describe('Manifest', () =>
                 },
             ],
         });
-    }, 30000);
+    });
 
     it('should copy over files and add them to manifest', async () =>
     {
@@ -470,7 +463,6 @@ describe('Manifest', () =>
                     includeMetaData: false,
                 }),
                 spineAtlasManifestMod(),
-                texturePackerManifestMod(),
             ],
         });
 
@@ -568,7 +560,6 @@ describe('Manifest', () =>
                     includeMetaData: false,
                 }),
                 spineAtlasManifestMod(),
-                texturePackerManifestMod(),
             ],
         });
 
@@ -686,7 +677,6 @@ describe('Manifest', () =>
                     includeMetaData: false,
                 }),
                 spineAtlasManifestMod(),
-                texturePackerManifestMod(),
             ],
         });
 
@@ -833,7 +823,6 @@ describe('Manifest', () =>
                     includeMetaData: false,
                 }),
                 spineAtlasManifestMod(),
-                texturePackerManifestMod(),
             ],
         });
 
