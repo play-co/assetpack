@@ -1,26 +1,20 @@
 import { checkExt, createNewAssetAt, path } from '../core/index.js';
 import { fonts } from './fonts.js';
 
-import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
+import type { Asset, AssetPipe } from '../core/index.js';
 
-export type WebfontOptions = PluginOptions<'wf'>;
-
-export function webfont(_options?: Partial<WebfontOptions>): AssetPipe<WebfontOptions>
+export function webfont(): AssetPipe<null, 'wf'>
 {
-    const defaultOptions: WebfontOptions = {
-        tags: {
-            wf: 'wf',
-            ..._options?.tags
-        },
-    };
-
     return {
         folder: false,
         name: 'webfont',
-        defaultOptions,
-        test(asset: Asset, options)
+        defaultOptions: null,
+        tags: {
+            wf: 'wf',
+        },
+        test(asset: Asset)
         {
-            return asset.allMetaData[options.tags.wf] && checkExt(asset.path, '.otf', '.ttf', '.svg');
+            return asset.allMetaData[this.tags!.wf] && checkExt(asset.path, '.otf', '.ttf', '.svg');
         },
         async transform(asset: Asset)
         {

@@ -15,12 +15,9 @@ export type DeepRequired<T> = T extends Primitive
                 ? DeepRequired<U2>
                 : DeepRequired<T[P]>
     };
-export interface PluginOptions<T extends string>
-{
-    tags?: Partial<Record<T, string>>;
-}
+export interface PluginOptions {}
 
-export interface AssetPipe<OPTIONS=Record<string, any>>
+export interface AssetPipe<OPTIONS=Record<string, any>, TAGS extends string = string>
 {
     /** Whether the process runs on a folder */
     folder?: boolean;
@@ -28,7 +25,11 @@ export interface AssetPipe<OPTIONS=Record<string, any>>
     /** Name of the plugin used to tell the manifest parsers which one to use */
     name: string;
 
+    /** Default options for the plugin */
     defaultOptions: OPTIONS;
+
+    /** Tags that can be used to control the plugin */
+    tags?: Record<TAGS, string>;
 
     /**
      * Called once at the start.

@@ -3,28 +3,25 @@ import { checkExt, createNewAssetAt } from '../core/index.js';
 import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
 import type { MipmapOptions } from '../image/index.js';
 
-export type SpineOptions = PluginOptions<'fix'> & MipmapOptions;
+export type SpineOptions = PluginOptions & MipmapOptions;
 
-export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOptions>
+export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOptions, 'fix'>
 {
-    const defaultOptions = {
-        template: '@%%x',
-        resolutions: { default: 1, low: 0.5 },
-        fixedResolution: 'default',
-        ..._options,
-        tags: {
-            fix: 'fix',
-            ..._options?.tags
-        },
-    };
-
     return {
         folder: false,
         name: 'mipmap-spine-atlas',
-        defaultOptions,
-        test(asset: Asset, options)
+        defaultOptions: {
+            template: '@%%x',
+            resolutions: { default: 1, low: 0.5 },
+            fixedResolution: 'default',
+            ..._options,
+        },
+        tags: {
+            fix: 'fix',
+        },
+        test(asset: Asset)
         {
-            return !asset.allMetaData[options.tags.fix as any] && checkExt(asset.path, '.atlas');
+            return !asset.allMetaData[this.tags!.fix] && checkExt(asset.path, '.atlas');
         },
         async transform(asset: Asset, options)
         {
@@ -33,7 +30,7 @@ export function spineAtlasMipmap(_options?: SpineOptions): AssetPipe<SpineOption
             fixedResolutions[options.fixedResolution] = options.resolutions[options.fixedResolution];
 
             const largestResolution = Math.max(...Object.values(options.resolutions));
-            const resolutionHash = asset.allMetaData[options.tags.fix as any] ? fixedResolutions : options.resolutions;
+            const resolutionHash = asset.allMetaData[this.tags!.fix] ? fixedResolutions : options.resolutions;
 
             const rawAtlas = asset.buffer.toString();
 

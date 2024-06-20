@@ -1,32 +1,29 @@
 import { checkExt, createNewAssetAt, swapExt } from '../core/index.js';
 import { AtlasView } from './AtlasView.js';
 
-import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
+import type { Asset, AssetPipe } from '../core/index.js';
 import type { CompressOptions } from '../image/index.js';
 
-export type SpineAtlasCompressOptions = PluginOptions<'nc'> & Omit<CompressOptions, 'jpg'>;
+export type SpineAtlasCompressOptions = Omit<CompressOptions, 'jpg'>;
 
-export function spineAtlasCompress(_options?: SpineAtlasCompressOptions): AssetPipe<SpineAtlasCompressOptions>
+export function spineAtlasCompress(_options?: SpineAtlasCompressOptions): AssetPipe<SpineAtlasCompressOptions, 'nc'>
 {
-    const defaultOptions = {
-        ...{
-            png: true,
-            webp: true,
-            avif: false,
-        },
-        ..._options,
-        tags: {
-            nc: 'nc',
-            ..._options?.tags
-        }
-    };
-
     return {
         name: 'spine-atlas-compress',
-        defaultOptions,
-        test(asset: Asset, options)
+        defaultOptions: {
+            ...{
+                png: true,
+                webp: true,
+                avif: false,
+            },
+            ..._options,
+        },
+        tags: {
+            nc: 'nc',
+        },
+        test(asset: Asset)
         {
-            return !asset.allMetaData[options.tags.nc]
+            return !asset.allMetaData[this.tags!.nc]
                 && checkExt(asset.path, '.atlas');
         },
         async transform(asset: Asset, options)

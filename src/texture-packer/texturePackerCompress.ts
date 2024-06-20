@@ -1,36 +1,33 @@
 import { checkExt, createNewAssetAt, swapExt } from '../core/index.js';
 
-import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
+import type { Asset, AssetPipe } from '../core/index.js';
 import type { CompressOptions } from '../image/compress.js';
 
-export type TexturePackerCompressOptions = PluginOptions<'tps' | 'nc'> & Omit<CompressOptions, 'jpg'>;
+export type TexturePackerCompressOptions = Omit<CompressOptions, 'jpg'>;
 
 export function texturePackerCompress(
     _options?: TexturePackerCompressOptions,
-): AssetPipe<TexturePackerCompressOptions>
+): AssetPipe<TexturePackerCompressOptions, 'tps' | 'nc'>
 {
-    const defaultOptions = {
-        ...{
-            png: true,
-            webp: true,
-            avif: false,
+    return {
+        name: 'texture-packer-compress',
+        defaultOptions: {
+            ...{
+                png: true,
+                webp: true,
+                avif: false,
+            },
+            ..._options,
         },
-        ..._options,
         tags: {
             tps: 'tps',
             nc: 'nc',
-            ..._options?.tags,
         },
-    };
-
-    return {
-        name: 'texture-packer-compress',
-        defaultOptions,
-        test(asset: Asset, options)
+        test(asset: Asset)
         {
             return (
-                asset.allMetaData[options.tags.tps]
-                && !asset.allMetaData[options.tags.nc]
+                asset.allMetaData[this.tags!.tps]
+                && !asset.allMetaData[this.tags!.nc]
                 && checkExt(asset.path, '.json')
             );
         },

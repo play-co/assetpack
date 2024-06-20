@@ -28,7 +28,7 @@ export interface PixiManifestEntry
     };
 }
 
-export interface PixiManifestOptions extends PluginOptions<'mIgnore' | 'manifest'>
+export interface PixiManifestOptions extends PluginOptions
 {
     output?: string;
     createShortcuts?: boolean;
@@ -36,24 +36,22 @@ export interface PixiManifestOptions extends PluginOptions<'mIgnore' | 'manifest
     includeMetaData?: boolean;
 }
 
-export function pixiManifest(_options: PixiManifestOptions = {}): AssetPipe<PixiManifestOptions>
+export function pixiManifest(_options: PixiManifestOptions = {}): AssetPipe<PixiManifestOptions, 'manifest' | 'mIgnore'>
 {
-    const defaultOptions: PixiManifestOptions = {
-        output: 'manifest.json',
-        createShortcuts: false,
-        trimExtensions: false,
-        includeMetaData: true,
-        ..._options,
+    return {
+        name: 'pixi-manifest',
+        defaultOptions: {
+            output: 'manifest.json',
+            createShortcuts: false,
+            trimExtensions: false,
+            includeMetaData: true,
+            ..._options,
+        },
         tags: {
             manifest: 'm',
             mIgnore: 'mIgnore'
-        }
-    };
-
-    return {
-        name: 'pixi-manifest',
-        defaultOptions,
-        finish: async (asset: Asset, options, pipeSystem: PipeSystem) =>
+        },
+        async finish(asset: Asset, options, pipeSystem: PipeSystem)
         {
             const newFileName = path.dirname(options.output) === '.'
                 ? path.joinSafe(pipeSystem.outputPath, options.output) : options.output;
@@ -67,7 +65,15 @@ export function pixiManifest(_options: PixiManifestOptions = {}): AssetPipe<Pixi
                 bundles: [defaultBundle]
             };
 
-            collectAssets(asset, options, pipeSystem.outputPath, pipeSystem.entryPath, manifest.bundles, defaultBundle);
+            collectAssets(
+                asset,
+                options,
+                pipeSystem.outputPath,
+                pipeSystem.entryPath,
+                manifest.bundles,
+                defaultBundle,
+                this.tags!
+            );
             filterUniqueNames(manifest);
             await fs.writeJSON(newFileName, manifest, { spaces: 2 });
         }
@@ -102,7 +108,8 @@ function collectAssets(
     outputPath = '',
     entryPath = '',
     bundles: PixiBundle[],
-    bundle: PixiBundle
+    bundle: PixiBundle,
+    tags: AssetPipe<null, 'manifest' | 'mIgnore'>['tags']
 )
 {
     if (asset.skip) return;
@@ -111,7 +118,7 @@ function collectAssets(
 
     let localBundle = bundle;
 
-    if (asset.metaData[options.tags!.manifest!])
+    if (asset.metaData[tags!.manifest!])
     {
         localBundle = {
             name: stripTags(asset.filename),
@@ -124,9 +131,9 @@ function collectAssets(
     const bundleAssets = localBundle.assets;
     const finalAssets = asset.getFinalTransformedChildren();
 
-    if (asset.transformChildren.length > 0 && !asset.inheritedMetaData[options.tags!.mIgnore!])
+    if (asset.transformChildren.length > 0 && !asset.inheritedMetaData[tags!.mIgnore!])
     {
-        const nonIgnored = finalAssets.filter((finalAsset) => !finalAsset.inheritedMetaData[options.tags!.mIgnore!]);
+        const nonIgnored = finalAssets.filter((finalAsset) => !finalAsset.inheritedMetaData[tags!.mIgnore!]);
 
         if (nonIgnored.length === 0) return;
 
@@ -143,7 +150,7 @@ function collectAssets(
 
     asset.children.forEach((child) =>
     {
-        collectAssets(child, options, outputPath, entryPath, bundles, localBundle);
+        collectAssets(child, options, outputPath, entryPath, bundles, localBundle, tags);
     });
 
     // for all assets.. check for atlas and remove them from the bundle..

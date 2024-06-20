@@ -5,7 +5,7 @@ import { checkExt, createNewAssetAt, stripTags } from '../core/index.js';
 import type { BitmapFontOptions } from 'msdf-bmfont-xml';
 import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
 
-export interface SDFFontOptions extends PluginOptions<'font' | 'nc' | 'fix'>
+export interface SDFFontOptions extends PluginOptions
 {
     name: string,
     type: BitmapFontOptions['fieldType'],
@@ -14,15 +14,20 @@ export interface SDFFontOptions extends PluginOptions<'font' | 'nc' | 'fix'>
 
 function signedFont(
     defaultOptions: SDFFontOptions
-): AssetPipe<SDFFontOptions>
+): AssetPipe<SDFFontOptions, 'font' | 'nc' | 'fix'>
 {
     return {
         folder: false,
         name: defaultOptions.name,
         defaultOptions,
-        test(asset: Asset, options)
+        tags: {
+            font: 'font',
+            nc: 'nc',
+            fix: 'fix',
+        },
+        test(asset: Asset)
         {
-            return asset.allMetaData[options.tags.font] && checkExt(asset.path, '.ttf');
+            return asset.allMetaData[this.tags!.font] && checkExt(asset.path, '.ttf');
         },
         async transform(asset: Asset, options)
         {
@@ -45,8 +50,8 @@ function signedFont(
                 const newTextureAsset = createNewAssetAt(asset, newTextureName);
 
                 // don't compress!
-                newTextureAsset.metaData[options.tags.nc] = true;
-                newTextureAsset.metaData[options.tags.fix] = true;
+                newTextureAsset.metaData[this.tags!.nc] = true;
+                newTextureAsset.metaData[this.tags!.fix] = true;
                 newTextureAsset.metaData.mIgnore = true;
 
                 assets.push(newTextureAsset);
@@ -67,34 +72,30 @@ function signedFont(
     };
 }
 
-export function sdfFont(options: Partial<SDFFontOptions> = {}): AssetPipe
+export function sdfFont(options: Partial<SDFFontOptions> = {})
 {
-    return signedFont({
+    const signed = signedFont({
         name: 'sdf-font',
         type: 'sdf',
         ...options,
-        tags: {
-            font: 'sdf',
-            nc: 'nc',
-            fix: 'fix',
-            ...options.tags
-        }
     });
+
+    signed.tags!.font = 'sdf';
+
+    return signed;
 }
 
-export function msdfFont(options: Partial<SDFFontOptions> = {}): AssetPipe
+export function msdfFont(options: Partial<SDFFontOptions> = {})
 {
-    return signedFont({
+    const signed = signedFont({
         name: 'msdf-font',
         type: 'msdf',
         ...options,
-        tags: {
-            font: 'msdf',
-            nc: 'nc',
-            fix: 'fix',
-            ...options.tags
-        }
     });
+
+    signed.tags!.font = 'msdf';
+
+    return signed;
 }
 
 async function GenerateFont(input: string, params: BitmapFontOptions): Promise<{
