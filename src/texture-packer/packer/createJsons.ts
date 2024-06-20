@@ -61,6 +61,17 @@ export function createJsons(
             };
         }
 
+        const name = createName(options.textureName, i, bins.length !== 1, options.resolution, options.textureFormat);
+
+        let multiPack: string[] | null = null;
+
+        if (bins.length > 1 && i === 0)
+        {
+            const binsWithoutFirst = bins.slice(1);
+
+            multiPack = binsWithoutFirst.map((_, i) => name.replace('-0', `-${i + 1}`).replace('.png', `.json`));
+        }
+
         json.meta = {
             app: 'http://github.com/pixijs/assetpack',
             version: '1.0',
