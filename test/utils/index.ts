@@ -88,6 +88,7 @@ export function createAssetPipe(
         folder: data.folder || false,
         name: name ?? 'test',
         defaultOptions: {},
+        tags: {},
         test: convert('test'),
         transform: convert('transform'),
         start: convert('start'),

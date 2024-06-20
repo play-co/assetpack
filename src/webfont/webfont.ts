@@ -3,7 +3,7 @@ import { fonts } from './fonts.js';
 
 import type { Asset, AssetPipe } from '../core/index.js';
 
-export function webfont(): AssetPipe<null, 'wf'>
+export function webfont(): AssetPipe<any, 'wf'>
 {
     return {
         folder: false,

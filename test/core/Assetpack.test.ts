@@ -54,13 +54,13 @@ describe('Core', () =>
             start: true,
             finish: true,
             transform: true,
-        }) as MockAssetPipe;
+        }) as unknown as MockAssetPipe;
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
             output: outputDir,
             pipes: [
-                plugin as AssetPipe<any>,
+                plugin as unknown as AssetPipe,
             ],
             cache: false,
         });
@@ -315,13 +315,13 @@ describe('Core', () =>
             start: true,
             finish: true,
             transform: true,
-        }) as MockAssetPipe;
+        });
 
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
             output: outputDir,
             pipes: [
-                plugin as AssetPipe<any>,
+                plugin
             ],
             cache: false,
             assetSettings: [
