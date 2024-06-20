@@ -998,6 +998,58 @@ describe('Manifest', () =>
             ],
         });
     });
+
+    it('should ignore files with the mIgnore tag', async () =>
+    {
+        const testName = 'manifest-ignore';
+        const inputDir = getInputDir(pkg, testName);
+        const outputDir = getOutputDir(pkg, testName);
+
+        createFolder(pkg, {
+            name: testName,
+            files: [
+                {
+                    name: '1.png',
+                    content: assetPath('image/sp-1.png'),
+                },
+                {
+                    name: '2{mIgnore}.png',
+                    content: assetPath('image/sp-1.png'),
+                },
+            ],
+            folders: [],
+        });
+
+        const assetpack = new AssetPack({
+            entry: inputDir,
+            cacheLocation: getCacheDir(pkg, testName),
+            output: outputDir,
+            cache: false,
+            pipes: [
+                pixiManifest({
+                    includeMetaData: false,
+                }),
+            ],
+        });
+
+        await assetpack.run();
+
+        const manifest = sortObjectProperties(await fs.readJSONSync(`${outputDir}/manifest.json`));
+
+        expect(manifest).toEqual({
+            bundles: [
+                {
+                    name: 'default',
+                    assets: [
+                        {
+                            alias: ['1.png'],
+                            src: ['1.png'],
+                        },
+                    ],
+                },
+            ],
+        });
+    });
 });
 
 function sortObjectProperties(obj: any)
