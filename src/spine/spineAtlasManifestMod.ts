@@ -1,6 +1,8 @@
 import fs from 'fs-extra';
-import { type Asset, type AssetPipe, findAssets, path } from '../core/index.js';
+import { findAssets, path } from '../core/index.js';
 import { AtlasView } from './AtlasView.js';
+
+import type { Asset, AssetPipe } from '../core/index.js';
 
 export interface SpineManifestOptions
 {
