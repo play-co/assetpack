@@ -137,6 +137,8 @@ function collectAssets(
 
         if (nonIgnored.length === 0) return;
 
+        if (nonIgnored.length === 0) return;
+
         bundleAssets.push({
             alias: getShortNames(stripTags(path.relative(entryPath, asset.path)), options),
             src: nonIgnored
