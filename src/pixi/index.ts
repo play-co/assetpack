@@ -12,7 +12,6 @@ import { spineAtlasMipmap } from '../spine/spineAtlasMipmap.js';
 import { texturePacker } from '../texture-packer/texturePacker.js';
 import { texturePackerCacheBuster } from '../texture-packer/texturePackerCacheBuster.js';
 import { texturePackerCompress } from '../texture-packer/texturePackerCompress.js';
-import { texturePackerManifestMod } from '../texture-packer/texturePackerManifestMod.js';
 import { webfont } from '../webfont/webfont.js';
 
 import type { FfmpegOptions } from '../ffmpeg/ffmpeg.js';
@@ -109,7 +108,6 @@ export function pixiAssetPackPipes(config: PixiAssetPack)
 
     pipes.push(
         pixiManifest(manifestOptions),
-        texturePackerManifestMod(manifestOptions),
         spineAtlasManifestMod(manifestOptions),
     );
 

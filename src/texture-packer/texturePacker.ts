@@ -159,6 +159,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
                         const textureAsset = createNewAssetAt(asset, name);
 
                         textureAsset.buffer = buffer;
+                        textureAsset.metaData.mIgnore = true;
 
                         const { json, name: jsonName } = out.jsons[i];
 

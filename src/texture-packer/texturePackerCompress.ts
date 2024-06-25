@@ -5,7 +5,9 @@ import type { CompressOptions } from '../image/compress.js';
 
 export type TexturePackerCompressOptions = PluginOptions<'tps' | 'nc'> & Omit<CompressOptions, 'jpg'>;
 
-export function texturePackerCompress(_options?: TexturePackerCompressOptions): AssetPipe<TexturePackerCompressOptions>
+export function texturePackerCompress(
+    _options?: TexturePackerCompressOptions,
+): AssetPipe<TexturePackerCompressOptions>
 {
     const defaultOptions = {
         ...{
@@ -17,8 +19,8 @@ export function texturePackerCompress(_options?: TexturePackerCompressOptions): 
         tags: {
             tps: 'tps',
             nc: 'nc',
-            ..._options?.tags
-        }
+            ..._options?.tags,
+        },
     };
 
     return {
@@ -26,17 +28,19 @@ export function texturePackerCompress(_options?: TexturePackerCompressOptions): 
         defaultOptions,
         test(asset: Asset, options)
         {
-            return (asset.allMetaData[options.tags.tps]
+            return (
+                asset.allMetaData[options.tags.tps]
                 && !asset.allMetaData[options.tags.nc]
-                && checkExt(asset.path, '.json'));
+                && checkExt(asset.path, '.json')
+            );
         },
         async transform(asset: Asset, options)
         {
             const formats = [];
 
-            if (options.avif)formats.push('avif');
-            if (options.png)formats.push('png');
-            if (options.webp)formats.push('webp');
+            if (options.avif) formats.push('avif');
+            if (options.png) formats.push('png');
+            if (options.webp) formats.push('webp');
 
             const json = JSON.parse(asset.buffer.toString());
 
@@ -49,8 +53,21 @@ export function texturePackerCompress(_options?: TexturePackerCompressOptions): 
                 json.meta.image = swapExt(json.meta.image, extension);
 
                 const newAsset = createNewAssetAt(asset, newFileName);
+                const newJson = JSON.parse(JSON.stringify(json));
 
-                newAsset.buffer = Buffer.from(JSON.stringify(json, null, 2));
+                if (newJson.meta.related_multi_packs)
+                {
+                    newJson.meta.related_multi_packs = (newJson.meta.related_multi_packs as string[]).map((pack) =>
+                        swapExt(pack, `${extension}.json`),
+                    );
+                }
+
+                newAsset.buffer = Buffer.from(JSON.stringify(newJson, null, 2));
+
+                if (!newJson.meta.related_multi_packs)
+                {
+                    newAsset.metaData.mIgnore = true;
+                }
 
                 return newAsset;
             });

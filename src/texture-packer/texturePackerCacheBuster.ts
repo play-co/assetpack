@@ -54,12 +54,13 @@ export function texturePackerCacheBuster(
             // to the output folder.
             const jsonAssets = textureJsonFilesToFix.map((asset) => asset.getFinalTransformedChildren()[0]);
 
-            jsonAssets.forEach((jsonAsset) =>
+            // loop through all the json files back to front
+            for (let i = jsonAssets.length - 1; i >= 0; i--)
             {
                 // we are going to replace the textures in the atlas file with the new cache busted textures
                 // as we do this, the hash of the atlas file will change, so we need to update the path
                 // and also remove the original file.
-
+                const jsonAsset = jsonAssets[i];
                 const originalHash = jsonAsset.hash;
                 const originalPath = jsonAsset.path;
 
@@ -75,15 +76,24 @@ export function texturePackerCacheBuster(
 
                 json.meta.image = cacheBustedTexture.filename;
 
+                if (json.meta.related_multi_packs)
+                {
+                    json.meta.related_multi_packs = (json.meta.related_multi_packs as string[]).map((pack) =>
+                    {
+                        const foundAssets = findAssets((asset) =>
+                            asset.filename === pack, asset, true);
+
+                        return foundAssets[0].getFinalTransformedChildren()[0].filename;
+                    });
+                }
+
                 jsonAsset.buffer = Buffer.from(JSON.stringify(json));
-
                 jsonAsset.path = jsonAsset.path.replace(originalHash, jsonAsset.hash);
-
                 fs.removeSync(originalPath);
 
                 // rewrite..
                 fs.writeFileSync(jsonAsset.path, jsonAsset.buffer);
-            });
+            }
 
             textureJsonFilesToFix.length = 0;
         }

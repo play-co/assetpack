@@ -15,12 +15,12 @@ export function createJsons(
     width: number,
     height: number,
     options: {
-        textureName: string,
-        resolution: number,
-        textureFormat: 'png' | 'jpg',
-        nameStyle: 'short' | 'relative',
-        removeFileExtension: boolean
-    }
+        textureName: string;
+        resolution: number;
+        textureFormat: 'png' | 'jpg';
+        nameStyle: 'short' | 'relative';
+        removeFileExtension: boolean;
+    },
 )
 {
     const bins = packer.bins;
@@ -32,7 +32,7 @@ export function createJsons(
         const bin = bins[i];
 
         const json: any = {
-            frames: {}
+            frames: {},
         };
 
         for (let j = 0; j < bin.rects.length; j++)
@@ -44,7 +44,7 @@ export function createJsons(
                     x: rect.x,
                     y: rect.y,
                     w: rect.width,
-                    h: rect.height
+                    h: rect.height,
                 },
                 rotated: rect.rot,
                 trimmed: rect.textureData.trimmed,
@@ -52,43 +52,43 @@ export function createJsons(
                     x: rect.textureData.trimOffsetLeft,
                     y: rect.textureData.trimOffsetTop,
                     w: rect.width,
-                    h: rect.height
+                    h: rect.height,
                 },
                 sourceSize: {
                     w: rect.textureData.originalWidth,
-                    h: rect.textureData.originalHeight
-                }
+                    h: rect.textureData.originalHeight,
+                },
             };
         }
 
         json.meta = {
             app: 'http://github.com/pixijs/assetpack',
             version: '1.0',
-            image: createName(
-                options.textureName,
-                i,
-                bins.length !== 1,
-                options.resolution,
-                options.textureFormat
-            ),
+            image: createName(options.textureName, i, bins.length !== 1, options.resolution, options.textureFormat),
             format: 'RGBA8888',
             size: {
                 w: width,
-                h: height
+                h: height,
             },
-            scale: options.resolution
+            scale: options.resolution,
+            related_multi_packs: null,
         };
 
         jsons.push({
-            name: createName(
-                options.textureName,
-                i,
-                bins.length !== 1,
-                options.resolution,
-                'json'
-            ),
-            json
+            name: createName(options.textureName, i, bins.length !== 1, options.resolution, 'json'),
+            json,
         });
+    }
+
+    // before we leave, lets connect all the jsons to the first json..
+
+    const firstJsonMeta = jsons[0].json.meta;
+
+    firstJsonMeta.related_multi_packs = [];
+
+    for (let i = 1; i < jsons.length; i++)
+    {
+        firstJsonMeta.related_multi_packs.push(jsons[i].name);
     }
 
     return jsons;
