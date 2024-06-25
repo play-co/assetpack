@@ -2,6 +2,8 @@ import fs from 'fs-extra';
 import { existsSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { AssetPack } from '../../src/core/index.js';
+import { compress } from '../../src/image/compress.js';
+import { mipmap } from '../../src/image/mipmap.js';
 import { pixiManifest } from '../../src/manifest/index.js';
 import { msdfFont, sdfFont, webfont } from '../../src/webfont/index.js';
 import { assetPath, createFolder, getCacheDir, getInputDir, getOutputDir } from '../utils/index.js';
@@ -228,7 +230,7 @@ describe('Webfont', () =>
         expect(existsSync(`${outputDir}/sdf.1.png`)).toBe(true);
     });
 
-    it.skip('should generate manifest correctly', async () =>
+    it('should generate manifest correctly', async () =>
     {
         const testName = 'webfont-manifest';
         const inputDir = getInputDir(pkg, testName);
@@ -258,6 +260,26 @@ describe('Webfont', () =>
                     ],
                     folders: [],
                 },
+                {
+                    name: 'msdfFolder{msdf}',
+                    files: [
+                        {
+                            name: 'ttf.ttf',
+                            content: assetPath('font/Roboto-Regular.ttf'),
+                        },
+                    ],
+                    folders: [],
+                },
+                {
+                    name: 'svgFolder{wf}',
+                    files: [
+                        {
+                            name: 'svg.svg',
+                            content: assetPath('font/Roboto-Regular.svg'),
+                        },
+                    ],
+                    folders: [],
+                }
             ],
         });
 
@@ -266,8 +288,11 @@ describe('Webfont', () =>
             output: outputDir,
             cache: false,
             pipes: [
-                webfont(), // import is breaking definition file
+                webfont(),
                 sdfFont(),
+                msdfFont(),
+                mipmap(),
+                compress(),
                 pixiManifest(),
             ]
         });
@@ -290,11 +315,29 @@ describe('Webfont', () =>
                     }
                 },
                 {
+                    alias: ['msdfFolder/ttf.ttf'],
+                    src: ['msdfFolder/ttf.fnt'],
+                    data: {
+                        tags: {
+                            msdf: true,
+                        }
+                    }
+                },
+                {
                     alias: ['sdfFolder/ttf.ttf'],
                     src: ['sdfFolder/ttf.fnt'],
                     data: {
                         tags: {
                             sdf: true,
+                        }
+                    }
+                },
+                {
+                    alias: ['svgFolder/svg.svg'],
+                    src: ['svgFolder/svg.woff2'],
+                    data: {
+                        tags: {
+                            wf: true,
                         }
                     }
                 },

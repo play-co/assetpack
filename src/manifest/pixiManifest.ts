@@ -1,10 +1,10 @@
 import fs from 'fs-extra';
-import {
-    type Asset,
-    type AssetPipe,
-    path,
-    type PipeSystem,
-    stripTags
+import { path, stripTags } from '../core/index.js';
+
+import type {
+    Asset,
+    AssetPipe,
+    PipeSystem, PluginOptions
 } from '../core/index.js';
 
 export interface PixiBundle
@@ -28,7 +28,7 @@ export interface PixiManifestEntry
     };
 }
 
-export interface PixiManifestOptions
+export interface PixiManifestOptions extends PluginOptions<'mIgnore' | 'manifest'>
 {
     output?: string;
     createShortcuts?: boolean;
@@ -38,12 +38,16 @@ export interface PixiManifestOptions
 
 export function pixiManifest(_options: PixiManifestOptions = {}): AssetPipe<PixiManifestOptions>
 {
-    const defaultOptions = {
+    const defaultOptions: PixiManifestOptions = {
         output: 'manifest.json',
         createShortcuts: false,
         trimExtensions: false,
         includeMetaData: true,
-        ..._options
+        ..._options,
+        tags: {
+            manifest: 'm',
+            mIgnore: 'mIgnore'
+        }
     };
 
     return {
@@ -98,7 +102,7 @@ function collectAssets(
     outputPath = '',
     entryPath = '',
     bundles: PixiBundle[],
-    bundle: PixiBundle,
+    bundle: PixiBundle
 )
 {
     if (asset.skip) return;
@@ -107,7 +111,7 @@ function collectAssets(
 
     let localBundle = bundle;
 
-    if (asset.metaData.m || asset.metaData.manifest)
+    if (asset.metaData[options.tags!.manifest!])
     {
         localBundle = {
             name: stripTags(asset.filename),
@@ -118,14 +122,17 @@ function collectAssets(
     }
 
     const bundleAssets = localBundle.assets;
-
     const finalAssets = asset.getFinalTransformedChildren();
 
-    if (asset.transformChildren.length > 0)
+    if (asset.transformChildren.length > 0 && !asset.inheritedMetaData[options.tags!.mIgnore!])
     {
+        const nonIgnored = finalAssets.filter((finalAsset) => !finalAsset.inheritedMetaData[options.tags!.mIgnore!]);
+
+        if (nonIgnored.length === 0) return;
+
         bundleAssets.push({
             alias: getShortNames(stripTags(path.relative(entryPath, asset.path)), options),
-            src: finalAssets
+            src: nonIgnored
                 .map((finalAsset) => path.relative(outputPath, finalAsset.path))
                 .sort((a, b) => b.localeCompare(a)),
             data:  options.includeMetaData ? {

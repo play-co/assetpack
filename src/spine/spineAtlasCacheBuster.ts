@@ -1,6 +1,8 @@
 import fs from 'fs-extra';
-import { type Asset, type AssetPipe, checkExt, findAssets } from '../core/index.js';
+import { checkExt, findAssets } from '../core/index.js';
 import { AtlasView } from './AtlasView.js';
+
+import type { Asset, AssetPipe } from '../core/index.js';
 
 /**
  * This should be used after the cache buster plugin in the pipes.

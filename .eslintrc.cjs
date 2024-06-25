@@ -5,15 +5,17 @@ module.exports = {
         ecmaVersion: 2020,
         sourceType: "module",
     },
+    plugins: ['import'],
     rules: {
         "spaced-comment": [1, "always", { markers: ["/"] }],
         "@typescript-eslint/triple-slash-reference": [1, { path: "always" }],
-        "@typescript-eslint/consistent-type-imports": [
-            1,
-            { disallowTypeAnnotations: false },
-        ],
         "@typescript-eslint/type-annotation-spacing": 1,
         "@typescript-eslint/no-non-null-assertion": 0,
+        "@typescript-eslint/consistent-type-imports":
+          ["error", { disallowTypeAnnotations: false }],
+        "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
+        "import/no-duplicates": ["error"],
+        "camelcase": 0,
     },
     overrides: [
         {

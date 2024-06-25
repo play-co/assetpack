@@ -45,7 +45,9 @@ function signedFont(
                 const newTextureAsset = createNewAssetAt(asset, newTextureName);
 
                 // don't compress!
-                newTextureAsset.metaData.copy = true;
+                newTextureAsset.metaData[options.tags.nc] = true;
+                newTextureAsset.metaData[options.tags.fix] = true;
+                newTextureAsset.metaData.mIgnore = true;
 
                 assets.push(newTextureAsset);
 
