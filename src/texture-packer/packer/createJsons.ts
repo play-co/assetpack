@@ -61,34 +61,34 @@ export function createJsons(
             };
         }
 
-        const name = createName(options.textureName, i, bins.length !== 1, options.resolution, options.textureFormat);
-
-        let multiPack: string[] | null = null;
-
-        if (bins.length > 1 && i === 0)
-        {
-            const binsWithoutFirst = bins.slice(1);
-
-            multiPack = binsWithoutFirst.map((_, i) => name.replace('-0', `-${i + 1}`).replace('.png', `.json`));
-        }
-
         json.meta = {
             app: 'http://github.com/pixijs/assetpack',
             version: '1.0',
-            image: name,
+            image: createName(options.textureName, i, bins.length !== 1, options.resolution, options.textureFormat),
             format: 'RGBA8888',
             size: {
                 w: width,
                 h: height,
             },
             scale: options.resolution,
-            related_multi_packs: multiPack,
+            related_multi_packs: null,
         };
 
         jsons.push({
             name: createName(options.textureName, i, bins.length !== 1, options.resolution, 'json'),
             json,
         });
+    }
+
+    // before we leave, lets connect all the jsons to the first json..
+
+    const firstJsonMeta = jsons[0].json.meta;
+
+    firstJsonMeta.related_multi_packs = [];
+
+    for (let i = 1; i < jsons.length; i++)
+    {
+        firstJsonMeta.related_multi_packs.push(jsons[i].name);
     }
 
     return jsons;
