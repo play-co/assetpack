@@ -81,7 +81,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
             return asset.isFolder && asset.metaData[options.tags.tps as any];
         },
 
-        start()
+        async start()
         {
             // restart the clashes!
             shortcutClash = {};
