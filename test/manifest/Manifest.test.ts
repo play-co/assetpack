@@ -300,6 +300,7 @@ describe('Manifest', () =>
                 },
                 {
                     alias: ['defaultFolder/mip/sprite0.png'],
+
                     src: [
                         'defaultFolder/mip/sprite0@0.5x.webp',
                         'defaultFolder/mip/sprite0@0.5x.png',
