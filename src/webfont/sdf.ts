@@ -12,7 +12,7 @@ export interface SDFFontOptions extends PluginOptions<'font' | 'nc' | 'fix'>
     font?: Omit<BitmapFontOptions, 'outputType' | 'fieldType'>;
 }
 
-export function signedFont(
+function signedFont(
     defaultOptions: SDFFontOptions
 ): AssetPipe<SDFFontOptions>
 {
@@ -45,8 +45,7 @@ export function signedFont(
                 const newTextureAsset = createNewAssetAt(asset, newTextureName);
 
                 // don't compress!
-                newTextureAsset.metaData[options.tags.nc] = true;
-                newTextureAsset.metaData[options.tags.fix] = true;
+                newTextureAsset.metaData.copy = true;
 
                 assets.push(newTextureAsset);
 
