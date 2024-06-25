@@ -6,7 +6,7 @@ import { resolveOptions } from './utils/resolveOptions.js';
 import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
 import type { CompressImageData } from './compress.js';
 
-export interface MipmapOptions<T extends string = ''> extends PluginOptions<'fix' | T>
+export interface MipmapOptions extends PluginOptions
 {
     /** A template for denoting the resolution of the images. */
     template?: string;
@@ -20,34 +20,28 @@ const defaultMipmapOptions: Required<MipmapOptions> = {
     template: '@%%x',
     resolutions: { default: 1, low: 0.5 },
     fixedResolution: 'default',
-    tags: {
-        fix: 'fix',
-    }
 };
 
-export function mipmap(_options: MipmapOptions = {}): AssetPipe<MipmapOptions>
+export function mipmap(_options: MipmapOptions = {}): AssetPipe<MipmapOptions, 'fix'>
 {
     const mipmap = resolveOptions(_options, defaultMipmapOptions);
-
-    const defaultOptions = {
-        ...mipmap,
-        tags: {
-            fix: 'fix',
-            ..._options.tags,
-        }
-    };
 
     return {
         folder: true,
         name: 'mipmap',
-        defaultOptions,
+        defaultOptions: {
+            ...mipmap,
+        },
+        tags: {
+            fix: 'fix',
+        },
         test(asset: Asset, options)
         {
             return options && checkExt(asset.path, '.png', '.jpg', '.jpeg');
         },
         async transform(asset: Asset, options)
         {
-            const shouldMipmap = mipmap && !asset.metaData[options.tags.fix as any];
+            const shouldMipmap = mipmap && !asset.metaData[this.tags!.fix];
 
             let processedImages: CompressImageData[];
 
@@ -62,13 +56,13 @@ export function mipmap(_options: MipmapOptions = {}): AssetPipe<MipmapOptions>
                 if (shouldMipmap)
                 {
                     const { resolutions, fixedResolution } = options as Required<MipmapOptions>
-                        || defaultOptions;
+                        || this.defaultOptions;
 
                     const fixedResolutions: {[x: string]: number} = {};
 
                     fixedResolutions[fixedResolution] = resolutions[fixedResolution];
 
-                    const resolutionHash = asset.allMetaData[options.tags.fix as any]
+                    const resolutionHash = asset.allMetaData[this.tags!.fix]
                         ? fixedResolutions
                         : resolutions;
 

@@ -6,7 +6,7 @@ import { packTextures } from './packer/packTextures.js';
 import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
 import type { PackTexturesOptions, TexturePackerFormat } from './packer/packTextures.js';
 
-export interface TexturePackerOptions extends PluginOptions<'tps' | 'fix' | 'jpg' >
+export interface TexturePackerOptions extends PluginOptions
 {
     texturePacker?: Partial<PackTexturesOptions>;
     resolutionOptions?: {
@@ -47,38 +47,35 @@ function checkForTexturePackerShortcutClashes(
     }
 }
 
-export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<TexturePackerOptions>
+export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<TexturePackerOptions, 'tps' | 'fix' | 'jpg'>
 {
-    const defaultOptions = {
-        resolutionOptions: {
-            template: '@%%x',
-            resolutions: { default: 1, low: 0.5 },
-            fixedResolution: 'default',
-            maximumTextureSize: 4096,
-            ..._options.resolutionOptions,
-        },
-        texturePacker: {
-            padding: 2,
-            nameStyle: 'relative',
-            ..._options.texturePacker,
-        },
-        tags: {
-            tps: 'tps',
-            fix: 'fix',
-            jpg: 'jpg',
-            ..._options.tags,
-        }
-    } as TexturePackerOptions;
-
     let shortcutClash: Record<string, boolean> = {};
 
     return {
         folder: true,
         name: 'texture-packer',
-        defaultOptions,
-        test(asset: Asset, options)
+        defaultOptions: {
+            resolutionOptions: {
+                template: '@%%x',
+                resolutions: { default: 1, low: 0.5 },
+                fixedResolution: 'default',
+                maximumTextureSize: 4096,
+                ..._options.resolutionOptions,
+            },
+            texturePacker: {
+                padding: 2,
+                nameStyle: 'relative',
+                ..._options.texturePacker,
+            },
+        },
+        tags: {
+            tps: 'tps',
+            fix: 'fix',
+            jpg: 'jpg',
+        },
+        test(asset: Asset)
         {
-            return asset.isFolder && asset.metaData[options.tags.tps as any];
+            return asset.isFolder && asset.metaData[this.tags!.tps];
         },
 
         async start()
@@ -89,7 +86,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
 
         async transform(asset: Asset, options)
         {
-            const { resolutionOptions, texturePacker, tags } = options;
+            const { resolutionOptions, texturePacker } = options;
 
             const fixedResolutions: {[x: string]: number} = {};
 
@@ -100,7 +97,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
             asset.skipChildren();
 
             const largestResolution = Math.max(...Object.values(resolutionOptions.resolutions));
-            const resolutionHash = asset.allMetaData[tags.fix] ? fixedResolutions : resolutionOptions.resolutions;
+            const resolutionHash = asset.allMetaData[this.tags!.fix] ? fixedResolutions : resolutionOptions.resolutions;
 
             const globPath = `${asset.path}/**/*.{jpg,png,gif}`;
             const files = await glob(globPath);
@@ -117,7 +114,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
                 return { path: stripTags(path.relative(asset.path, f)), contents };
             }));
 
-            const textureFormat = (asset.metaData[tags.jpg] ? 'jpg' : 'png') as TexturePackerFormat;
+            const textureFormat = (asset.metaData[this.tags!.jpg] ? 'jpg' : 'png') as TexturePackerFormat;
 
             const texturePackerOptions = {
                 ...texturePacker,
@@ -174,7 +171,7 @@ export function texturePacker(_options: TexturePackerOptions = {}): AssetPipe<Te
 
                         jsonAsset.buffer = Buffer.from(JSON.stringify(json, null, 2));
 
-                        textureAsset.metaData[tags.fix] = true;
+                        textureAsset.metaData[this.tags!.fix] = true;
 
                         jsonAsset.transformData.page = i;
 

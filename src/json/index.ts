@@ -1,26 +1,19 @@
 import { checkExt, createNewAssetAt, Logger } from '../core/index.js';
 
-import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
+import type { Asset, AssetPipe } from '../core/index.js';
 
-export type JsonOptions = PluginOptions<'nc'>;
-
-export function json(_options: JsonOptions = {}): AssetPipe
+export function json(): AssetPipe<any, 'nc'>
 {
-    const defaultOptions = {
-        tags: {
-            nc: 'nc',
-            ..._options?.tags
-        }
-
-    };
-
     return {
         name: 'json',
         folder: false,
-        defaultOptions,
-        test(asset: Asset, options)
+        defaultOptions: null,
+        tags: {
+            nc: 'nc',
+        },
+        test(asset: Asset)
         {
-            return !asset.metaData[options.tags.nc] && checkExt(asset.path, '.json');
+            return !asset.metaData[this.tags!.nc] && checkExt(asset.path, '.json');
         },
         async transform(asset: Asset)
         {

@@ -11,7 +11,7 @@ type CompressWebpOptions = Omit<WebpOptions, 'force'>;
 type CompressAvifOptions = Omit<AvifOptions, 'force'>;
 type CompressPngOptions = Omit<PngOptions, 'force'>;
 
-export interface CompressOptions extends PluginOptions<'nc'>
+export interface CompressOptions extends PluginOptions
 {
     png?: CompressPngOptions | boolean;
     webp?: CompressWebpOptions | boolean;
@@ -26,7 +26,7 @@ export interface CompressImageData
     sharpImage: sharp.Sharp;
 }
 
-export function compress(options: CompressOptions = {}): AssetPipe<CompressOptions>
+export function compress(options: CompressOptions = {}): AssetPipe<CompressOptions, 'nc'>
 {
     const compress = resolveOptions<CompressOptions>(options, {
         png: true,
@@ -52,25 +52,22 @@ export function compress(options: CompressOptions = {}): AssetPipe<CompressOptio
         });
     }
 
-    const defaultOptions = {
-        ...compress,
-        tags: {
-            nc: 'nc',
-            ...options.tags,
-        }
-    };
-
     return {
         folder: true,
         name: 'compress',
-        defaultOptions,
+        defaultOptions: {
+            ...compress,
+        },
+        tags: {
+            nc: 'nc',
+        },
         test(asset: Asset, options)
         {
-            return options && checkExt(asset.path, '.png', '.jpg', '.jpeg') && !asset.allMetaData[options.tags.nc as any];
+            return options && checkExt(asset.path, '.png', '.jpg', '.jpeg') && !asset.allMetaData[this.tags!.nc];
         },
         async transform(asset: Asset, options)
         {
-            const shouldCompress = compress && !asset.metaData[options.tags.nc as any];
+            const shouldCompress = compress && !asset.metaData.nc;
 
             if (!shouldCompress)
             {

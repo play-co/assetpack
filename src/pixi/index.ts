@@ -14,6 +14,7 @@ import { texturePackerCacheBuster } from '../texture-packer/texturePackerCacheBu
 import { texturePackerCompress } from '../texture-packer/texturePackerCompress.js';
 import { webfont } from '../webfont/webfont.js';
 
+import type { AssetPipe } from '../core/index.js';
 import type { FfmpegOptions } from '../ffmpeg/ffmpeg.js';
 import type { CompressOptions } from '../image/compress.js';
 import type { PixiManifestOptions } from '../manifest/pixiManifest.js';
@@ -80,7 +81,7 @@ export function pixiAssetPackPipes(config: PixiAssetPack)
         mipmap({
             resolutions: apConfig.resolutions as Record<string, number>,
         }),
-    ];
+    ] as AssetPipe[];
 
     if (apConfig.compression !== false)
     {

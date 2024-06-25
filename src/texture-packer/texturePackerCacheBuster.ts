@@ -1,9 +1,7 @@
 import fs from 'fs-extra';
 import { checkExt, findAssets } from '../core/index.js';
 
-import type { Asset, AssetPipe, PluginOptions } from '../core/index.js';
-
-export type TexturePackerCacheBustOptions = PluginOptions<'tps'>;
+import type { Asset, AssetPipe } from '../core/index.js';
 
 /**
  * This should be used after the cache buster plugin in the pipes.
@@ -16,29 +14,22 @@ export type TexturePackerCacheBustOptions = PluginOptions<'tps'>;
  *
  * Kind of like applying a patch at the end of the transform process.
  *
- * @param _options
  * @returns
  */
-export function texturePackerCacheBuster(
-    _options: TexturePackerCacheBustOptions = {}
-): AssetPipe<TexturePackerCacheBustOptions>
+export function texturePackerCacheBuster(): AssetPipe<any, 'tps'>
 {
-    const defaultOptions = {
-        tags: {
-            tps: 'tps',
-            ..._options.tags,
-        },
-    };
-
     const textureJsonFilesToFix: Asset[] = [];
 
     return {
         folder: false,
         name: 'texture-packer-cache-buster',
-        defaultOptions,
-        test(asset: Asset, options)
+        defaultOptions: null,
+        tags: {
+            tps: 'tps',
+        },
+        test(asset: Asset)
         {
-            return asset.allMetaData[options.tags.tps] && checkExt(asset.path, '.json');
+            return asset.allMetaData[this.tags!.tps] && checkExt(asset.path, '.json');
         },
 
         async transform(asset: Asset, _options)

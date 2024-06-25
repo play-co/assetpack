@@ -213,19 +213,19 @@ describe('Texture Packer', () =>
                 ],
             });
 
+        const tps = texturePacker({
+            resolutionOptions: {
+                resolutions: { default: 1 },
+            },
+        });
+
+        tps.tags!.tps = 'random';
         const assetpack = new AssetPack({
             entry: inputDir, cacheLocation: getCacheDir(pkg, testName),
             output: outputDir,
             cache: false,
             pipes: [
-                texturePacker({
-                    resolutionOptions: {
-                        resolutions: { default: 1 },
-                    },
-                    tags: {
-                        tps: 'random',
-                    }
-                })
+                tps
             ]
         });
 
