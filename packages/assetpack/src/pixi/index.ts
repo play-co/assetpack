@@ -81,15 +81,15 @@ export function pixiPipes(config: PixiAssetPack)
         mipmap({
             resolutions: apConfig.resolutions as Record<string, number>,
         }),
+        spineAtlasMipmap({
+            resolutions: apConfig.resolutions as Record<string, number>,
+        }),
     ] as AssetPipe[];
 
     if (apConfig.compression !== false)
     {
         pipes.push(
             compress(apConfig.compression),
-            spineAtlasMipmap({
-                resolutions: apConfig.resolutions as Record<string, number>,
-            }),
             spineAtlasCompress(apConfig.compression),
             texturePackerCompress(apConfig.compression),
         );

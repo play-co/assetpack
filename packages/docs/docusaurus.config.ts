@@ -75,12 +75,6 @@ const config: Config = {
                     label: 'Guide',
                 },
                 {
-                    type: 'docSidebar',
-                    sidebarId: 'plugin',
-                    position: 'left',
-                    label: 'Plugins',
-                },
-                {
                     href: 'https://opencollective.com/pixijs',
                     className: 'header-link header-open-col-link',
                     'aria-label': 'Open Collective',

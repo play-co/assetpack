@@ -1,18 +1,80 @@
 ---
-sidebar_position: 1
+sidebar_position: 0
 ---
 
-# Configuration
+# API Reference
 
 AssetPack uses a config file to define what assets you want to optimise and how you want to optimise them. The config file is a JavaScript file that exports an object with the following properties:
 
-- `entry`: The directory where your raw assets are located.
-- `output`: The directory where you want your optimised assets to be outputted to.
-- `plugins`: An object containing the plugins you want to use. The key is the name of the plugin, and the value is the plugin itself.
-- `ignore`: an optional array of ignore patterns. Any file path matching the patterns will not be processed by assetpack
-- `cache`: an optional boolean to enable or disable caching. Defaults to true.
-- `logLevel`: an optional string to set the log level. Defaults to 'info'.
-- `files`: an optional object to override the settings and tags of any assets. See [Config Overrides](#config-overrides) for more details.
+### entry
+
+| Type     | Default | Required |
+| -------- | ------- | -------- |
+| `string` |         | Yes      |
+
+The directory where your raw assets are located.
+
+### output
+
+| Type     | Default | Required |
+| -------- | ------- | -------- |
+| `string` |         | Yes      |
+
+The directory where you want your optimised assets to be outputted to.
+
+### ignore
+
+| Type       | Default | Required |
+| ---------- | ------- | -------- |
+| `string[]` |         | No       |
+
+An optional array of ignore patterns. Any file path matching the patterns will not be processed by assetpack.
+
+### cache
+
+| Type      | Default | Required |
+| --------- | ------- | -------- |
+| `boolean` | `true`  | No       |
+
+An optional boolean to enable or disable caching.
+
+### cacheLocation
+
+| Type     | Default        | Required |
+| -------- | -------------- | -------- |
+| `string` | `'.assetpack'` | No       |
+
+An optional string to set the location of the cache.
+
+### logLevel
+
+| Type     | Default  | Required |
+| -------- | -------- | -------- |
+| `string` | `'info'` | No       |
+
+An optional string to set the log level.
+
+### pipes
+
+| Type     | Default | Required |
+| -------- | ------- | -------- |
+| `Pipe[]` |         | No       |
+
+An array of pipes to use. For examples of pipes, see [Pipes](/docs/guide/pipes/overview#concepts).
+
+### assetSettings
+
+| Type             | Default | Required |
+| ---------------- | ------- | -------- |
+| `AssetSetting[]` |         | No       |
+
+| Property | Type     | Default | Required |
+| -------- | -------- | ------- | -------- |
+| files    | `string` |         | Yes      |
+| settings | `object` |         | No       |
+| metaData | `object` |         | No       |
+
+An optional array of asset settings. This allows you to set specific settings for individual assets.
 
 #### Example
 
@@ -20,8 +82,28 @@ AssetPack uses a config file to define what assets you want to optimise and how 
 // .assetpack.js
 
 export default {
-  entry: "./raw-assets",
-  output: "./public",
-  plugins: {},
+    entry: './raw-assets',
+    output: './public',
+    ignore: ['**/*.html'],
+    cache: true,
+    cacheLocation: '.assetpack',
+    logLevel: 'info',
+    pipes: [
+        // Pipes go here
+    ],
+    assetSettings: [
+        {
+            files: ['**/*.png'],
+            settings: {
+                compress: {
+                    jpg: true,
+                    png: true,
+                    // all png files will be compressed to avif format but not webp
+                    webp: false,
+                    avif: true,
+                },
+            },
+        },
+    ],
 };
 ```

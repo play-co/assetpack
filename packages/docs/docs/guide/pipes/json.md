@@ -1,27 +1,30 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 ---
 
 # JSON
 
-AssetPack plugin for minifying JSON files.
+AssetPack plugin for minifying JSON files. This plugin simplifies JSON files by removing whitespace, reducing file size and improving load times.
 
-## Installation
+## API
+N/A for this plugin.
 
-```sh
-npm install --save-dev @assetpack/plugin-json
-```
+## Example
 
-## Usage
+TODO: add ToggleImage example
 
 ```js
-import { json } from "@assetpack/plugin-json";
+import { json } from "assetpack";
 
 export default {
   ...
-  plugins: {
+  pipes: {
     ...
-    json: json(),
+    json(),
   },
 };
 ```
+
+## Tags
+
+N/A for this plugin.

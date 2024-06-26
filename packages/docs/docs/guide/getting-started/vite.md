@@ -7,6 +7,8 @@ title: Vite
 
 Below is an example of how to use AssetPack with Vite.
 
+To see a full list of configuration options, see the [API Reference](/docs/guide/configuration).
+
 ```ts
 // vite.config.mts
 import { defineConfig, type Plugin, type ResolvedConfig } from 'vite';

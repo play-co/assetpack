@@ -137,8 +137,6 @@ function collectAssets(
 
         if (nonIgnored.length === 0) return;
 
-        if (nonIgnored.length === 0) return;
-
         bundleAssets.push({
             alias: getShortNames(stripTags(path.relative(entryPath, asset.path)), options),
             src: nonIgnored
@@ -171,6 +169,12 @@ function getShortNames(name: string, options: PixiManifestOptions)
     createShortcuts && allNames.push(path.basename(name));
     createShortcuts && trimExtensions && allNames.push(path.trimExt(path.basename(name)));
     /* eslint-enable @typescript-eslint/no-unused-expressions */
+
+    // remove duplicates
+    const uniqueNames = new Set(allNames);
+
+    allNames.length = 0;
+    uniqueNames.forEach((name) => allNames.push(name));
 
     return allNames;
 }

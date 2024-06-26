@@ -7,6 +7,8 @@ title: Programmatic
 
 AssetPack can be run programmatically, allowing you to run AssetPack from your own scripts.
 
+To see a full list of configuration options, see the [API Reference](/docs/guide/configuration).
+
 ## Usage
 
 To use AssetPack programmatically, you need to import the `assetpack` function from the `assetpack` package, and call it with the following options:

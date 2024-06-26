@@ -34,13 +34,13 @@ The `ffmpeg` plugin exposes the full FFmpeg API, allowing for the conversion of 
 
 ## API
 
-The plugin takes an input array of file extensions and produces an output based on the options.
-
--   `inputs`: An array of file extensions to be processed.
--   `outputs`: An array of objects containing the output formats and options for each format.
-    -   `formats`: An array of file extensions to be output.
-    -   `recompress`: A boolean value indicating whether the input file should be compressed if the output format is the same as the input format.
-    -   `options`: An object containing the FFmpeg options for the output file.
+| Option             | Type        | Description                                                                                                                  |
+| ------------------ | ----------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| inputs             | `string[]`  | An array of file extensions to be processed.                                                                                 |
+| outputs            | `object[]`  | An array of objects containing the output formats and options for each format.                                               |
+| outputs.formats    | `string[]`  | An array of file extensions to be output.                                                                                    |
+| outputs.recompress | `boolean`   | A boolean value indicating whether the input file should be compressed if the output format is the same as the input format. |
+| outputs.options    | `object`    | An object containing the FFmpeg options for the output file.                                                                 |
 
 ### Example
 

@@ -26,5 +26,5 @@ This will run AssetPack before your build command, and will optimise your assets
 
 ## Configuration
 
-- `-c`: The location of the config file to use. Defaults to `.assetpack.js`.
+- `-c`: The location of the config file to use. Defaults to `.assetpack.js`. To see a full list of configuration options, see the [API Reference](/docs/guide/configuration).
 - `-w`: Watch the assets directory for changes and re-run AssetPack when changes are detected.

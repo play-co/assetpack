@@ -1,11 +1,16 @@
 import { useState } from 'react';
 
-export const Toggle = ({ toggleImage, showImage1 }) => (
+type ToggleProps = {
+    toggleImage: () => void;
+    showImage1: boolean;
+};
+
+export const Toggle = ({ toggleImage, showImage1 }: ToggleProps) => (
     <div style={{ width: '100%' }}>
         <div
             style={{
                 display: 'flex',
-                justifyContent: 'right',
+                justifyContent: 'center',
                 alignItems: 'center',
                 width: '100%',
                 height: '100%',
@@ -43,7 +48,33 @@ export const Toggle = ({ toggleImage, showImage1 }) => (
     </div>
 );
 
-export const ImageToggle = ({ image, height }) =>
+export const Image = ({ image, primaryBoxShadow }: { image: string; primaryBoxShadow: boolean }) => (
+    <div
+        style={{
+            width: '100%',
+            height: '100%',
+            margin: '0 auto',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            position: 'absolute',
+        }}
+    >
+        <img
+            src={image}
+            alt="Input Image"
+            style={{
+                maxWidth: '100%',
+                maxHeight: '100%',
+                objectFit: 'contain',
+                borderRadius: '12px',
+                boxShadow: primaryBoxShadow ? '0 0 20px hsla(340, 70%, 44%, 0.5)' : '0 0 20px hsla(192, 84%, 40%, 0.5)'
+            }}
+        />
+    </div>
+);
+
+export const ImageToggle = ({ image, height }: { image: string; height: number }) =>
 {
     const [showImage1, setShowImage1] = useState(true);
 
@@ -52,7 +83,7 @@ export const ImageToggle = ({ image, height }) =>
         setShowImage1(!showImage1);
     };
 
-    height ??= 600;
+    height ??= 350;
     const image1 = `/assetpack/screenshots/${image}.png`;
     const image2 = `/assetpack/screenshots/${image}-pro.png`;
 
@@ -63,7 +94,7 @@ export const ImageToggle = ({ image, height }) =>
                 flexDirection: 'column',
                 alignItems: 'center',
                 width: '100%',
-                paddingBottom: '20px',
+                paddingBottom: '24px',
             }}
         >
             <Toggle toggleImage={toggleImage} showImage1={showImage1} />
@@ -77,28 +108,7 @@ export const ImageToggle = ({ image, height }) =>
                         height: '100%',
                     }}
                 >
-                    <div
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            margin: '0 auto',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'absolute',
-                        }}
-                    >
-                        <img
-                            src={image1}
-                            alt="Input Image"
-                            style={{
-                                maxWidth: '100%',
-                                maxHeight: '100%',
-                                objectFit: 'contain',
-                                boxShadow: '0 0 20px rgba(0, 0, 0, 0.5)',
-                            }}
-                        />
-                    </div>
+                    <Image image={image1} primaryBoxShadow={false} />
                 </div>
                 <div
                     style={{
@@ -109,28 +119,7 @@ export const ImageToggle = ({ image, height }) =>
                         height: '100%',
                     }}
                 >
-                    <div
-                        style={{
-                            width: '100%',
-                            height: '100%',
-                            margin: '0 auto',
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            position: 'absolute',
-                        }}
-                    >
-                        <img
-                            src={image2}
-                            alt="Processed Image"
-                            style={{
-                                maxWidth: '100%',
-                                maxHeight: '100%',
-                                objectFit: 'contain',
-                                boxShadow: '0 0 20px rgba(0, 0, 0, 0.5)',
-                            }}
-                        />
-                    </div>
+                    <Image image={image2} primaryBoxShadow={true} />
                 </div>
             </div>
         </div>
