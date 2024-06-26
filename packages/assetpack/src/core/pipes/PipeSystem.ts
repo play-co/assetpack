@@ -77,7 +77,7 @@ export class PipeSystem
         // this is to ensure that the asset is copied to the output directory without any other processing
         if (asset.allMetaData.copy && pipe !== finalCopyPipe)
         {
-            await this._transform(asset, pipeIndex);
+            await this._transform(asset, this.pipes.length - 1);
 
             return;
         }
