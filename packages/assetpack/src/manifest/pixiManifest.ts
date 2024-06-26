@@ -131,15 +131,15 @@ function collectAssets(
     const bundleAssets = localBundle.assets;
     const finalAssets = asset.getFinalTransformedChildren();
 
-    if (asset.transformChildren.length > 0 && !asset.inheritedMetaData[tags!.mIgnore!])
+    if (asset.transformChildren.length > 0)
     {
-        const nonIgnored = finalAssets.filter((finalAsset) => !finalAsset.inheritedMetaData[tags!.mIgnore!]);
+        const finalManifestAssets = finalAssets.filter((finalAsset) => !finalAsset.inheritedMetaData[tags!.mIgnore!]);
 
-        if (nonIgnored.length === 0) return;
+        if (finalManifestAssets.length === 0) return;
 
         bundleAssets.push({
             alias: getShortNames(stripTags(path.relative(entryPath, asset.path)), options),
-            src: nonIgnored
+            src: finalManifestAssets
                 .map((finalAsset) => path.relative(outputPath, finalAsset.path))
                 .sort((a, b) => b.localeCompare(a)),
             data:  options.includeMetaData ? {
