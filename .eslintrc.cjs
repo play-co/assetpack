@@ -16,6 +16,7 @@ module.exports = {
         "import/consistent-type-specifier-style": ["error", "prefer-top-level"],
         "import/no-duplicates": ["error"],
         "camelcase": 0,
+        "max-len": ["error", { code: 180 }],
     },
     overrides: [
         {
